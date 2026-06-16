@@ -12,20 +12,20 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:controller="com.iskollect.controller.LoginController" prefHeight="768.0" prefWidth="1366.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:controller="com.iskollect.controller.LoginController" prefHeight="768.0" prefWidth="1366.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox layoutX="-1.0" prefHeight="768.0" prefWidth="1366.0">
          <children>
             <ImageView fitHeight="764.0" fitWidth="892.0">
                <image>
-                  <Image url="@../assets/recycle.jpg" />
+                  <Image preserveRatio="true" requestedHeight="764.0" requestedWidth="892.0" smooth="true" url="@../assets/recycle.jpg" />
                </image>
             </ImageView>
             <Pane prefHeight="768.0" prefWidth="474.0" style="-fx-background-color: #bef28a;">
                <children>
                   <ImageView fitHeight="88.0" fitWidth="374.0" layoutX="50.0" layoutY="152.0">
                      <image>
-                        <Image url="@../assets/bf780c16-c3ed-449f-b2ab-6ceda0ca0e53.png" />
+               <Image preserveRatio="true" requestedHeight="88.0" requestedWidth="374.0" smooth="true" url="@../assets/bf780c16-c3ed-449f-b2ab-6ceda0ca0e53.png" />
                      </image>
                   </ImageView>
                   <Label layoutX="99.0" layoutY="240.0" text="Garbage recycling Reward system">

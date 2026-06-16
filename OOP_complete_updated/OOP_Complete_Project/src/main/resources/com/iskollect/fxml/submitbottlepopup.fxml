@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="550.0" prefWidth="450.0" style="-fx-background-radius: 30;" styleClass="card" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.BottleSubmitController">
+<AnchorPane prefHeight="550.0" prefWidth="450.0" style="-fx-background-radius: 30;" styleClass="card" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.BottleSubmitController">
    <children>
       <Label layoutX="107.0" layoutY="14.0" text="Submit Bottle">
          <font>
@@ -28,7 +28,7 @@
       </Label>
       <ImageView fitHeight="200.0" fitWidth="226.0" layoutX="113.0" layoutY="98.0" styleClass="HBox">
          <image>
-            <Image url="@../assets/1.png" />
+               <Image preserveRatio="true" requestedHeight="200.0" requestedWidth="226.0" smooth="true" url="@../assets/1.png" />
          </image>
       </ImageView>
       <TextField fx:id="bottleCountField" layoutX="74.0" layoutY="309.0" prefHeight="78.0" prefWidth="300.0" style="-fx-background-radius: 20;">

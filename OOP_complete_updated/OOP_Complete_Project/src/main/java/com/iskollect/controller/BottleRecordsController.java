@@ -195,7 +195,7 @@ public class BottleRecordsController {
                     if (img == null) {
                         try (java.io.InputStream stream = getClass().getResourceAsStream(imgPath)) {
                             if (stream != null) {
-                                img = new Image(stream);
+                                img = new Image(stream, 81, 74, true, true);
                                 IMAGE_CACHE.put(imgPath, img);
                             } else {
                                 System.err.println("Badge image resource not found: " + imgPath);

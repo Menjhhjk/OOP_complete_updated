@@ -146,7 +146,7 @@ public class DashboardController {
                         try {
                             Image img = IMAGE_CACHE.computeIfAbsent(imagePath, path -> {
                                 try {
-                                    return new Image(getClass().getResourceAsStream(path));
+                                    return new Image(getClass().getResourceAsStream(path), 135, 129, true, true);
                                 } catch (Exception ex) {
                                     System.err.println("Could not load badge image: " + path);
                                     return null;

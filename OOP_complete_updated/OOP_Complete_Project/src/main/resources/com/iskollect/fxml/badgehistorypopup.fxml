@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="550.0" prefWidth="900.0" style="-fx-background-radius: 30;" styleClass="card" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.BadgeHistoryController">
+<AnchorPane prefHeight="550.0" prefWidth="900.0" style="-fx-background-radius: 30;" styleClass="card" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.BadgeHistoryController">
    <children>
       <Label layoutX="328.0" layoutY="20.0" text="Badge History">
          <font>

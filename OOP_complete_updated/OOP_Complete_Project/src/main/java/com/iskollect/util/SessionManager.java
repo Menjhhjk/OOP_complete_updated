@@ -5,15 +5,19 @@ import com.iskollect.exception.DatabaseException;
 import com.iskollect.model.User;
 import com.iskollect.service.PointsService;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 public class SessionManager {
     private static User loggedInUser;
     private static final PointsService pointsService = new PointsService();
     private static final BottleRecordDAO bottlerecordDAO = new BottleRecordDAO();
-    private static final List<Runnable> pointUpdateListeners = new ArrayList<>();
+    private static final Set<Runnable> pointUpdateListeners =
+            Collections.newSetFromMap(new WeakHashMap<>());
 
-    public static void setSession(User user) {
+    public static synchronized void setSession(User user) {
         if (user != null) {
             String token = java.util.UUID.randomUUID().toString();
             user.setSessionToken(token);
@@ -35,22 +39,28 @@ public class SessionManager {
         }
     }
 
-    public static void addPointUpdateListener(Runnable listener) {
-        if (!pointUpdateListeners.contains(listener)) {
+    public static synchronized void addPointUpdateListener(Runnable listener) {
+        if (listener != null) {
             pointUpdateListeners.add(listener);
         }
     }
 
     public static void notifyPointUpdate() {
         refreshUserSession();
-        for (Runnable listener : pointUpdateListeners) {
-            listener.run();
+        List<Runnable> listeners;
+        synchronized (SessionManager.class) {
+            listeners = new ArrayList<>(pointUpdateListeners);
+        }
+        for (Runnable listener : listeners) {
+            if (listener != null) {
+                listener.run();
+            }
         }
     }
 
     public static User getSession() { return loggedInUser; }
 
-    public static void clearSession() {
+    public static synchronized void clearSession() {
         loggedInUser = null;
         pointUpdateListeners.clear();
     }

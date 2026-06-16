@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: #bef28a;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.DashboardController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: #bef28a;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.DashboardController">
    <children>
       <VBox prefHeight="768.0" prefWidth="300.0">
          <children>
@@ -24,7 +24,7 @@
                      <children>
                         <ImageView fitHeight="68.0" fitWidth="274.0">
                            <image>
-                              <Image url="@../assets/bf780c16-c3ed-449f-b2ab-6ceda0ca0e53.png" />
+                                    <Image preserveRatio="true" requestedHeight="68.0" requestedWidth="274.0" smooth="true" url="@../assets/bf780c16-c3ed-449f-b2ab-6ceda0ca0e53.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -202,7 +202,7 @@
                                              <children>
                                                 <ImageView fitHeight="123.0" fitWidth="154.0">
                                                    <image>
-                                                      <Image url="@../assets/1.png" />
+                                                <Image preserveRatio="true" requestedHeight="123.0" requestedWidth="154.0" smooth="true" url="@../assets/1.png" />
                                                    </image>
                                                 </ImageView>
                                                 <VBox alignment="BOTTOM_RIGHT" prefHeight="123.0" prefWidth="211.0">
@@ -240,7 +240,7 @@
                                        <children>
                                           <ImageView fitHeight="122.0" fitWidth="121.0">
                                              <image>
-                                                <Image url="@../assets/2.png" />
+                                                <Image preserveRatio="true" requestedHeight="122.0" requestedWidth="121.0" smooth="true" url="@../assets/2.png" />
                                              </image>
                                           </ImageView>
                                           <VBox alignment="BOTTOM_RIGHT" prefHeight="123.0" prefWidth="246.0">
@@ -280,7 +280,7 @@
                                        <children>
                                           <ImageView fitHeight="129.0" fitWidth="129.0">
                                              <image>
-                                                <Image url="@../assets/3.png" />
+                                                <Image preserveRatio="true" requestedHeight="129.0" requestedWidth="129.0" smooth="true" url="@../assets/3.png" />
                                              </image>
                                           </ImageView>
                                           <VBox alignment="BOTTOM_RIGHT" prefHeight="131.0" prefWidth="238.0">
@@ -313,7 +313,7 @@
                                        <children>
                                           <ImageView fx:id="badgeImageView" fitHeight="129.0" fitWidth="135.0">
                                              <image>
-                                                <Image url="@../assets/7.png" />
+                                                <Image preserveRatio="true" requestedHeight="129.0" requestedWidth="135.0" smooth="true" url="@../assets/7.png" />
                                              </image>
                                           </ImageView>
                                           <VBox alignment="BOTTOM_RIGHT" prefHeight="131.0" prefWidth="232.0">

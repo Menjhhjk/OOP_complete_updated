@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: #bef28a;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.ProfileController">
+<AnchorPane prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: #bef28a;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.ProfileController">
    <children>
       
                   <VBox prefHeight="768.0" prefWidth="300.0">
@@ -26,7 +26,7 @@
                            <children>
                               <ImageView fitHeight="68.0" fitWidth="274.0">
                                  <image>
-                                    <Image url="@../assets/bf780c16-c3ed-449f-b2ab-6ceda0ca0e53.png" />
+                                    <Image preserveRatio="true" requestedHeight="68.0" requestedWidth="274.0" smooth="true" url="@../assets/bf780c16-c3ed-449f-b2ab-6ceda0ca0e53.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -253,7 +253,7 @@
                                     </Label>
                                     <ImageView fx:id="profilePicture" fitHeight="151.0" fitWidth="146.0" layoutX="131.0" layoutY="14.0">
                                        <image>
-                                          <Image url="@../assets/2.png" />
+                                    <Image preserveRatio="true" requestedHeight="151.0" requestedWidth="146.0" smooth="true" url="@../assets/2.png" />
                                        </image>
                                     </ImageView>
                                     <Label fx:id="usernameDisplayLabel" layoutX="162.0" layoutY="189.0" text="\@username">

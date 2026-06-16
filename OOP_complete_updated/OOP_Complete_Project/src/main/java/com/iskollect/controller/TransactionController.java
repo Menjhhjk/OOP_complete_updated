@@ -171,14 +171,14 @@ public class TransactionController {
 
     @FXML
     private void applyFilters() {
-        String type   = couponTypeFilter != null ? couponTypeFilter.getValue() : "All";
-        String status = statusFilter     != null ? statusFilter.getValue()     : "All";
-        String fromText = fromDateFilter != null ? fromDateFilter.getValue() : "All";
-        String toText = toDateFilter != null ? toDateFilter.getValue() : "All";
+        String type   = safeFilterValue(couponTypeFilter, "All");
+        String status = safeFilterValue(statusFilter,     "All");
+        String fromText = safeFilterValue(fromDateFilter, "All");
+        String toText = safeFilterValue(toDateFilter, "All");
         java.time.LocalDate from = parseDateFilter(fromText);
         java.time.LocalDate to = parseDateFilter(toText);
         List<Redemption> filtered = allData.stream()
-                .filter(r -> "All".equals(type)   || type.equals(r.getCouponName()))
+                .filter(r -> "All".equals(type) || type.equals(r.getCouponName()))
                 .filter(r -> "All".equals(status) ||
                         ("Fulfilled".equals(status) ? r.isFulfilled() : !r.isFulfilled()))
                 .filter(r -> from == null || (r.getRedemptionDate() != null && !r.getRedemptionDate().isBefore(from)))
@@ -186,6 +186,14 @@ public class TransactionController {
                 .collect(Collectors.toList());
         if (transactionTable != null)
             transactionTable.setItems(FXCollections.observableArrayList(filtered));
+    }
+
+    private String safeFilterValue(ComboBox<String> comboBox, String defaultValue) {
+        if (comboBox == null) {
+            return defaultValue;
+        }
+        String value = comboBox.getValue();
+        return value == null ? defaultValue : value;
     }
 
     @FXML
