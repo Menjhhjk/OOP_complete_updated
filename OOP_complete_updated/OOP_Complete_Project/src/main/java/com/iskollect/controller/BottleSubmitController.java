@@ -58,7 +58,6 @@ public class BottleSubmitController {
             return;
         }
 
-        user.setTotalPoints(user.getTotalPoints() + result.getTotalPoints());
         user.setStreak(result.getCurrentStreak());
 
         bottleCountField.clear();

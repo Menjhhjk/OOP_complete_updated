@@ -5,17 +5,13 @@ import com.iskollect.exception.DatabaseException;
 import com.iskollect.model.User;
 import com.iskollect.service.PointsService;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.WeakHashMap;
 
 public class SessionManager {
     private static User loggedInUser;
     private static final PointsService pointsService = new PointsService();
     private static final BottleRecordDAO bottlerecordDAO = new BottleRecordDAO();
-    private static final Set<Runnable> pointUpdateListeners =
-            Collections.newSetFromMap(new WeakHashMap<>());
+    private static final List<Runnable> pointUpdateListeners = new ArrayList<>();
 
     public static synchronized void setSession(User user) {
         if (user != null) {
@@ -40,7 +36,7 @@ public class SessionManager {
     }
 
     public static synchronized void addPointUpdateListener(Runnable listener) {
-        if (listener != null) {
+        if (listener != null && !pointUpdateListeners.contains(listener)) {
             pointUpdateListeners.add(listener);
         }
     }
