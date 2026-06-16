@@ -23,15 +23,12 @@ import java.util.List;
  *   CREATE TABLE inout_logs (
  *       log_id       INTEGER       GENERATED ALWAYS AS IDENTITY,
  *       user_id      INT           NOT NULL,
- *       event_type   VARCHAR(10)   NOT NULL,   -- 'INGRESS' | 'EGRESS'
- *       entry_method VARCHAR(20)   NOT NULL,   -- 'MANUAL'
- *       timestamp    TIMESTAMP     NOT NULL,
- *       staff_note   TEXT          NULL,
- *       status       VARCHAR(20)   NOT NULL,   -- 'VALID' | 'DUPLICATE' | 'UNRESOLVED'
- *       PRIMARY KEY (log_id)
- *       -- FK to users will be added by the Registration Module:
- *       -- CONSTRAINT fk_inout_user FOREIGN KEY (user_id)
- *       --     REFERENCES users(user_id) ON DELETE RESTRICT
+ *       log_id       SERIAL PRIMARY KEY,
+ *       user_id      INTEGER       NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+ *       action       VARCHAR(50)   NOT NULL,   -- LOGIN | LOGOUT | SESSION_TIMEOUT | LOCK
+ *       performed_at TIMESTAMP     DEFAULT NOW(),
+ *       ip_address   VARCHAR(45),
+ *       notes        VARCHAR(255)
  *   );
  *
  * ──────────────────────────────────────────────────────────────────────

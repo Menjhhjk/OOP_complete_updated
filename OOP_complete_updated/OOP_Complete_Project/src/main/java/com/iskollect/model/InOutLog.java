@@ -17,6 +17,10 @@ public class InOutLog {
     private String staffNote;
 
     public enum EventType {
+        LOGIN,
+        LOGOUT,
+        SESSION_TIMEOUT,
+        LOCK,
         INGRESS,
         EGRESS
     }

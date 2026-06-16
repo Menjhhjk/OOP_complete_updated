@@ -1,25 +1,31 @@
 package com.iskollect.service;
 
+import com.iskollect.dao.InOutLogDAO;
 import com.iskollect.exception.DatabaseException;
 import com.iskollect.exception.InvalidInputException;
+import com.iskollect.model.InOutLog;
+import com.iskollect.model.InOutLog.EntryMethod;
+import com.iskollect.model.InOutLog.EventType;
+import com.iskollect.model.InOutLog.LogStatus;
 import com.iskollect.model.User;
 import com.iskollect.dao.UserDAO;
 import com.iskollect.util.SessionManager;
 import com.iskollect.util.PasswordUtil;
 
+import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
 public class AuthService {
     private static final String PUP_WEBMAIL_DOMAIN = "@iskolarngbayan.pup.edu.ph";
     private static final Pattern WEBMAIL_PATTERN =
             Pattern.compile("^[A-Za-z0-9][A-Za-z0-9._-]{1,63}" + Pattern.quote(PUP_WEBMAIL_DOMAIN) + "$");
-    private static final Pattern USERNAME_PATTERN =
-            Pattern.compile("^[A-Za-z0-9][A-Za-z0-9._-]{2,29}$");
 
     private final UserDAO userDAO;
+    private final InOutLogDAO inOutLogDAO;
 
     public AuthService() {
         this.userDAO = new UserDAO();
+        this.inOutLogDAO = new InOutLogDAO();
     }
 
     public boolean register(User user)
@@ -85,6 +91,7 @@ public class AuthService {
             //begins the session of the user
             SessionManager.setSession(user);
             userDAO.updateSessionToken(user.getUserId(), user.getSessionToken());
+            logActivity(user.getUserId(), EventType.LOGIN, "User logged in.");
             return true;
         }
 
@@ -97,11 +104,28 @@ public class AuthService {
         //clears the session and current token
         if (currentUser != null) {
             userDAO.updateSessionToken(currentUser.getUserId(), null);
+            logActivity(currentUser.getUserId(), EventType.LOGOUT, "User logged out.");
         }
         SessionManager.clearSession();
     }
 
     private boolean isValidWebmail(String webmail) {
         return webmail != null && WEBMAIL_PATTERN.matcher(webmail.trim()).matches();
+    }
+
+    private void logActivity(int userId, EventType eventType, String note) {
+        try {
+            InOutLog log = new InOutLog(
+                    userId,
+                    eventType,
+                    EntryMethod.MANUAL,
+                    LocalDateTime.now(),
+                    note,
+                    LogStatus.VALID
+            );
+            inOutLogDAO.insert(log);
+        } catch (DatabaseException e) {
+            System.err.println("[AuthService] Activity log failed: " + e.getMessage());
+        }
     }
 }

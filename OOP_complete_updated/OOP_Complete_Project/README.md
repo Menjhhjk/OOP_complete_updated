@@ -1,47 +1,108 @@
-# Iskollect
+# ISKOllect
 
-Iskollect is a Java desktop application for a bottle-based recycling rewards system. It uses a 3-tier architecture:
+ISKOllect is a JavaFX desktop application for a school-based garbage recycling rewards system. It allows students to register using their PUP webmail, submit collected bottles, earn points and badges, redeem rewards, and view their bottle and transaction history.
 
-- Presentation layer: JavaFX controllers
-- Business logic layer: service classes and model/result objects
-- Data access layer: JDBC DAOs connected to Supabase PostgreSQL
+The system was developed as an Object-Oriented Programming project using a layered Java architecture with PostgreSQL/Supabase as the database.
 
-Supabase PostgreSQL is the database source of truth. The SQL files in this repository are reference files that should match the live Supabase schema, but the live Supabase schema takes priority when there is a mismatch.
+## Features
+
+- User registration and login using PUP webmail
+- Password hashing with BCrypt
+- Bottle submission with point calculation
+- Streak and badge rewards
+- Rewards catalog and coupon redemption
+- Transaction history with filters
+- Bottle collection records
+- Profile management
+- Password update validation
+- PostgreSQL/Supabase database connection
 
 ## Technology Stack
 
-- Java 17 target, commonly run with JDK 21
-- JavaFX 21.0.5
+- Java 21
+- JavaFX 21
 - Maven
 - JDBC
-- PostgreSQL JDBC driver 42.7.4
-- Supabase PostgreSQL
-- jBCrypt 0.4
+- PostgreSQL / Supabase
+- jBCrypt
+- FXML and CSS for the interface
 
-## Database
-
-Connection settings are read from:
+## Project Structure
 
 ```text
-resources/config.properties
+OOP_Complete_Project/
+|-- pom.xml
+|-- mvnw
+|-- mvnw.cmd
+|-- README.md
+|-- sql/
+|   `-- 00_create_core_schema_postgresql.sql
+|-- src/
+|   `-- main/
+|       |-- java/
+|       |   |-- module-info.java
+|       |   `-- com/
+|       |       `-- iskollect/
+|       |           |-- Main.java
+|       |           |-- TestDatabaseConnection.java
+|       |           |-- controller/
+|       |           |-- dao/
+|       |           |-- exception/
+|       |           |-- model/
+|       |           |-- scheduler/
+|       |           |-- service/
+|       |           `-- util/
+|       `-- resources/
+|           |-- config.properties
+|           `-- com/
+|               `-- iskollect/
+|                   |-- fxml/
+|                   |-- assets/
+|                   `-- style.css
 ```
 
-Expected keys:
+## Prerequisites
+
+Before running the project, install:
+
+- JDK 21 or later
+- Git, if cloning from GitHub
+- Internet connection for Supabase database access
+- An IDE such as IntelliJ IDEA, VS Code, or NetBeans
+
+Maven does not need to be installed separately because the project includes the Maven Wrapper.
+
+Check Java with:
+
+```bash
+java -version
+```
+
+## Database Setup
+
+ISKOllect uses PostgreSQL through Supabase.
+
+The database configuration file is:
+
+```text
+src/main/resources/config.properties
+```
+
+Use this format:
 
 ```properties
 db.url=jdbc:postgresql://<host>:5432/<database>
-db.user=<username>
-db.password=<password>
+db.user=<database_username>
+db.password=<database_password>
 ```
 
-The current Supabase-aligned reference schema files are:
+The database schema reference is located at:
 
 ```text
 sql/00_create_core_schema_postgresql.sql
-sql/01_create_inout_logs.sql
 ```
 
-Current expected Supabase tables:
+Expected tables include:
 
 - `users`
 - `badges`
@@ -53,241 +114,151 @@ Current expected Supabase tables:
 - `streaks`
 - `user_badges`
 
-Important schema notes:
+The current schema reference follows `ISKOllect_Schema_6-14-2026.docx` for the core table and column names. It also includes the documented foreign-key delete behavior, `display_name VARCHAR(50)`, and badge bonus values of `0`, `1`, `3`, `5`, and `10`.
 
-- `coupons` has only `coupon_id`, `coupon_name`, and `points_required`.
-- `coupons.description` and `coupons.coupon_type` do not exist.
-- `users` stores hashed passwords in `password_hash`, not `password`.
-- `users` does not currently store `name`, `course`, or `year_level`.
-- `inout_logs` uses `action`, `performed_at`, `ip_address`, and `notes`.
-- Legacy in/out columns such as `event_type`, `entry_method`, `timestamp`, `staff_note`, and `status` are not in the live Supabase table.
+Important: Do not commit real database credentials to a public GitHub repository. Use placeholder values or a private configuration file when sharing the project publicly.
 
-## Project Structure
+## Installation
+
+Clone the repository or download the project folder.
+
+Open PowerShell or Command Prompt inside the project folder:
 
 ```text
-Iskollect/
-|-- pom.xml                                      [Build Configuration]
-|-- README.md                                    [Project Documentation]
-|-- SESSION_UPDATES.md                           [Advisor Session Documentation]
-|-- resources/
-|   `-- config.properties                        [Database Configuration]
-|-- sql/
-|   |-- 00_create_core_schema_postgresql.sql     [Supabase Reference Schema]
-|   `-- 01_create_inout_logs.sql                 [Ingress/Egress Reference Schema]
-|-- src/com/iskollect/
-|   |-- TestDatabaseConnection.java              [Supabase Diagnostics]
-|   |-- controller/
-|   |   |-- ActivityHistoryController.java       [Activity History]
-|   |   |-- BottleSubmitController.java          [Bottle Submission and Points]
-|   |   |-- CouponsController.java               [Coupons Catalog]
-|   |   |-- DashboardController.java             [Dashboard, Points, Badges, Streaks]
-|   |   |-- InOutController.java                 [Ingress/Egress Logging]
-|   |   |-- ProfileController.java               [User Profile]
-|   |   `-- RedeemController.java                [Coupon Redemption]
-|   |-- dao/
-|   |   |-- BottleRecordDAO.java                 [Bottle Submission and Activity History]
-|   |   |-- CouponDAO.java                       [Coupons Catalog]
-|   |   |-- InOutLogDAO.java                     [Ingress/Egress Logging]
-|   |   |-- PointsLedgerDAO.java                 [Points Ledger and Audit Trail]
-|   |   |-- RedemptionDAO.java                   [Coupon Redemption and History]
-|   |   `-- UserDAO.java                         [Authentication, Session, User Points]
-|   |-- exception/
-|   |   |-- AuthException.java                   [Authentication]
-|   |   |-- DatabaseException.java               [Shared Database Error Handling]
-|   |   |-- DuplicateLogException.java           [Ingress/Egress Logging]
-|   |   |-- InsufficientPointsException.java     [Coupon Redemption]
-|   |   |-- InvalidInputException.java           [Validation]
-|   |   `-- NavigationException.java             [Navigation]
-|   |-- model/
-|   |   |-- ActivityHistory.java                 [Activity History]
-|   |   |-- BottleRecord.java                    [Bottle Submission and Points]
-|   |   |-- Coupon.java                          [Coupons Catalog]
-|   |   |-- InOutLog.java                        [Ingress/Egress Logging]
-|   |   |-- LogResult.java                       [Ingress/Egress Logging]
-|   |   |-- RedeemResult.java                    [Coupon Redemption]
-|   |   |-- Redemption.java                      [Coupon Redemption and History]
-|   |   |-- ReportResult.java                    [Reports]
-|   |   |-- SubmitResult.java                    [Bottle Submission and Points]
-|   |   `-- User.java                            [Authentication, Session, User Profile]
-|   |-- scheduler/
-|   |   `-- WeeklyResetScheduler.java            [Weekly Reset]
-|   |-- service/
-|   |   |-- ActivityHistoryService.java          [Activity History]
-|   |   |-- AuthService.java                     [Authentication]
-|   |   |-- BadgeService.java                    [Badges and Weekly Rewards]
-|   |   |-- BottleService.java                   [Bottle Submission and Points]
-|   |   |-- CouponService.java                   [Coupons and Redemption]
-|   |   |-- InOutService.java                    [Ingress/Egress Logging]
-|   |   |-- PointsService.java                   [Points Calculation and Balance]
-|   |   |-- ReportService.java                   [Reports]
-|   |   |-- SecurityCheck.java                   [Session Security]
-|   |   `-- StreakService.java                   [Streak Bonuses]
-|   `-- util/
-|       |-- AlertUtil.java                       [JavaFX Alerts]
-|       |-- CouponGenerator.java                 [Coupon Redemption]
-|       |-- DBConnection.java                    [Supabase JDBC Connection]
-|       |-- PasswordUtil.java                    [Authentication Security]
-|       |-- RedirectUtil.java                    [Navigation]
-|       |-- SessionManager.java                  [Session Management]
-|       `-- UserValidator.java                   [Ingress/Egress User Validation Stub]
+OOP_Complete_Project
 ```
 
-## Implemented Modules
+Install dependencies and build the project:
 
-### Authentication and Session Management
+```bash
+.\mvnw.cmd clean install
+```
 
-- PUP webmail-only registration validation
-- BCrypt password hashing
-- Login password verification against `users.password_hash`
-- Session token persistence in `users.session_token`
-- Last-activity tracking in `users.last_activity`
-- `SecurityCheck` validates idle timeout and token symmetry
+On macOS or Linux:
 
-### Bottle Submission and Points
+```bash
+./mvnw clean install
+```
 
-- Bottle count validation
-- Base point calculation: `bottles * 0.5`
-- Streak bonus calculation
-- Weekly badge bonus calculation
-- Bottle submission persistence through `bottle_records`
-- Auditable point deltas through `points_ledger`
-- User point and bottle total updates through `users`
+## Running the Application
 
-### Coupons and Redemption
+Run the JavaFX application with:
 
-- Supabase coupon catalog retrieval from `coupons`
-- Atomic redemption flow using JDBC transactions
-- Unique coupon code generation
-- Negative point ledger entry on redemption
-- Redemption history retrieval from `redemptions`
-- Redemption status values currently use `pending` and `claimed`
+```bash
+.\mvnw.cmd javafx:run
+```
 
-### Ingress and Egress Logging
+On macOS or Linux:
 
-- Manual ingress and egress event logging
-- Duplicate event detection by `user_id`, `action`, and `performed_at`
-- Daily log retrieval
-- Supabase-aligned `inout_logs` columns:
-  - `log_id`
-  - `user_id`
-  - `action`
-  - `performed_at`
-  - `ip_address`
-  - `notes`
+```bash
+./mvnw javafx:run
+```
 
-### Activity History
+The login screen should appear after the application starts.
 
-- Bottle submissions and redemptions merged into one history
-- Filtering by today, current week, current month, or current year
+## Running from an IDE
 
-### Reports
+1. Open `OOP_Complete_Project` as a Maven project.
+2. Wait for Maven dependencies to finish importing.
+3. Run the main class:
 
-`ReportService` supports:
+```text
+src/main/java/com/iskollect/Main.java
+```
 
-- Bottle summary by user and date range
-- Weekly leaderboard
-- Points ledger
-- Redemption report
-- System summary
+Main class:
 
-Report methods return `ReportResult` and convert database errors into failure results.
+```text
+com.iskollect.Main
+```
 
-### Weekly Reset
+If the IDE shows a JavaFX runtime error, run the application through Maven:
 
-`WeeklyResetScheduler` runs every 7 days and delegates weekly reset behavior to `BadgeService`.
+```bash
+.\mvnw.cmd javafx:run
+```
 
-The live Supabase schema does not contain `system_config`, so the scheduler currently keeps its last-reset date in memory during the running application session.
+## Testing the Database Connection
 
-## Supabase Diagnostics
+The project includes a database diagnostic class:
 
-`src/com/iskollect/TestDatabaseConnection.java` is a read-only diagnostics runner for the live Supabase database.
+```text
+src/main/java/com/iskollect/TestDatabaseConnection.java
+```
 
-It:
-
-- Tests the JDBC connection.
-- Masks `user` and `password` values in the printed JDBC URL.
-- Checks each expected table individually.
-- Lists table columns from `information_schema.columns`.
-- Runs `SELECT * FROM public.<table> LIMIT 5`.
-- Prints sample rows as console pseudo-tables.
-- Prints `(no rows)` when a table exists and is reachable but empty.
-
-Run it from the IDE as:
+Class name:
 
 ```text
 com.iskollect.TestDatabaseConnection
 ```
 
-## JavaFX Prototypes
-
-The repository includes two JavaFX UI prototypes based on the UI team's low-fidelity PDF:
-
-- `com.iskollect.prototype.HighFidelityPrototype`
-  - Current default for `mvn javafx:run`
-  - Uses the existing Supabase/JDBC backend where data is available
-  - Shows `NIL` placeholders when tables are empty
-  - Includes a `Bypass Login for Testing` button
-  - Uses a green-grey/white palette with muted accent colors
-- `com.iskollect.prototype.LowFidelityPrototype`
-  - Earlier wireframe-style prototype
-  - Useful for comparing against the original low-fidelity layout
-
-Run the high-fidelity prototype:
-
-```bash
-mvn javafx:run
-```
-
-If your IDE reports `JavaFX runtime components are missing`, use the Maven command above or configure the IDE to launch with the JavaFX Maven plugin/module path.
+Run this class from the IDE to verify that the application can connect to the database and access the required tables.
 
 ## Build and Test
 
-Compile:
+Compile without running tests:
 
 ```bash
-mvn -q -DskipTests compile
+.\mvnw.cmd -q -DskipTests package
 ```
 
 Run tests:
 
 ```bash
-mvn -q test
+.\mvnw.cmd -q test
 ```
 
-## IDE Notes
+## Key Implementation Details
 
-VS Code or another Java IDE should import the Maven project automatically.
+### CRUD Operations
 
-If JavaFX imports show as unresolved, clean/reload the Java language server and allow Maven dependencies to be imported.
+The system uses DAO classes to perform database operations:
 
-## Known Integration Notes
+- `UserDAO` handles user records, profile updates, passwords, and session tokens.
+- `BottleRecordDAO` handles bottle submission records.
+- `CouponDAO` handles available coupon data.
+- `RedemptionDAO` handles coupon redemption history.
+- `PointsLedgerDAO` records point changes.
 
-- Supabase PostgreSQL is the source of truth for schema decisions.
-- `resources/config.properties` contains database credentials and should not be shared publicly.
-- `UserValidator` is still a stub and currently returns `true`; in/out logging should eventually validate real users.
-- `ProfileController` still exposes course/year-level UI fields, but Supabase does not persist those fields.
-- `InOutLog` keeps compatibility enums for entry method/status, but those values are not stored in Supabase.
-- Badge bonus values in code and Supabase seed data should be reviewed for product consistency.
-- Additional DAO/service integration tests are still needed.
+### Validation
 
-## Architecture Document
+Validation is handled in the controllers and service layer. The system validates:
 
-The backend system architecture document was refreshed to match the current Java/Supabase implementation:
+- Required login and registration fields
+- PUP webmail format
+- Password length and required characters
+- Bottle submission limits
+- Age format
+- Username length and allowed characters
+- Matching password confirmation fields
+
+### Database Connection
+
+Database access is handled through:
 
 ```text
-C:\Users\Rommel\Downloads\ISKOLLECT - System Architecture.docx
+src/main/java/com/iskollect/util/DBConnection.java
 ```
 
-A backup of the previous version was saved as:
+The application uses JDBC prepared statements in DAO classes to reduce SQL injection risk and safely pass user input to database queries.
 
-```text
-C:\Users\Rommel\Downloads\ISKOLLECT - System Architecture.backup-20260610.docx
-```
+## Recent Bug Fixes
 
-## Advisor Session Notes
+- Added a maximum bottle submission limit.
+- Fixed transaction date filters.
+- Separated display name and username updates.
+- Added visible validation messages for profile and password updates.
+- Improved PUP webmail validation during registration and login.
+- Reduced repeated login/logout memory buildup by loading scenes fresh and stopping detached screen clocks.
+- Aligned Maven compiler settings with Java 21.
 
-A focused advisor-readable summary of development changes is available in:
+## Known Limitations
 
-```text
-SESSION_UPDATES.md
-```
+- Forgot Password currently collects a reset request but does not send an email or verification code. Full password recovery requires an external email or verification service.
+- Account deletion and record deletion are not available through the user interface.
+- Database credentials must be configured before running the application.
+- The schema document defines `inout_logs.action` for account/session events such as `LOGIN`, `LOGOUT`, `SESSION_TIMEOUT`, and `LOCK`. The current system now records `LOGIN`, `LOGOUT`, and `SESSION_TIMEOUT`, but it also keeps the existing ingress/egress monitoring values `INGRESS` and `EGRESS` because that module is already implemented in the codebase.
+
+## Authors
+
+Developed by the ISKOllect project team for an Object-Oriented Programming course.

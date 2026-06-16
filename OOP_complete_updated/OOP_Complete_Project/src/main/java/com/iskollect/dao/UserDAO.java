@@ -22,7 +22,8 @@ public class UserDAO {
 
     private void ensureDisplayNameColumn() throws SQLException {
         try (Statement st = conn().createStatement()) {
-            st.executeUpdate("ALTER TABLE users ADD COLUMN IF NOT EXISTS display_name VARCHAR(100)");
+            st.executeUpdate("ALTER TABLE users ADD COLUMN IF NOT EXISTS display_name VARCHAR(50)");
+            st.executeUpdate("ALTER TABLE users ALTER COLUMN display_name TYPE VARCHAR(50) USING LEFT(display_name, 50)");
         }
     }
 

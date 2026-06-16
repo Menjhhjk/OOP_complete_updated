@@ -1,6 +1,11 @@
 package com.iskollect.service;
 
+import com.iskollect.dao.InOutLogDAO;
 import com.iskollect.exception.DatabaseException;
+import com.iskollect.model.InOutLog;
+import com.iskollect.model.InOutLog.EntryMethod;
+import com.iskollect.model.InOutLog.EventType;
+import com.iskollect.model.InOutLog.LogStatus;
 import com.iskollect.model.User;
 import com.iskollect.dao.UserDAO;
 import com.iskollect.util.SessionManager;
@@ -13,6 +18,7 @@ public class SecurityCheck {
     private static final int MAX_INACTIVITY_MINUTES = 30;
 
     private final UserDAO userDAO = new UserDAO();
+    private final InOutLogDAO inOutLogDAO = new InOutLogDAO();
 
     public boolean isSessionValid() {
         User currentUser = SessionManager.getSession();
@@ -26,6 +32,7 @@ public class SecurityCheck {
 
         if (isSessionExpired(currentUser.getLastActivity())) {
             System.out.println("[SecurityService] Blocked: Inactivity idle timeout detected.");
+            logActivity(userId, EventType.SESSION_TIMEOUT, "Session expired after 30 minutes of inactivity.");
             handleForcedLogout(userId);
             return false;
         }
@@ -66,6 +73,22 @@ public class SecurityCheck {
         } finally {
             SessionManager.clearSession();
             System.out.println("[SecurityCheck] Local session memory cleared safely.");
+        }
+    }
+
+    private void logActivity(int userId, EventType eventType, String note) {
+        try {
+            InOutLog log = new InOutLog(
+                    userId,
+                    eventType,
+                    EntryMethod.MANUAL,
+                    LocalDateTime.now(),
+                    note,
+                    LogStatus.VALID
+            );
+            inOutLogDAO.insert(log);
+        } catch (DatabaseException e) {
+            System.err.println("[SecurityCheck] Activity log failed: " + e.getMessage());
         }
     }
 }
