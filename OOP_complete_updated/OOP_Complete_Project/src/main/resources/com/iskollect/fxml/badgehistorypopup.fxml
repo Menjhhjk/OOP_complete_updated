@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="550.0" prefWidth="900.0" style="-fx-background-radius: 30;" styleClass="card" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.BadgeHistoryController">
+   <children>
+      <Label layoutX="328.0" layoutY="20.0" text="Badge History">
+         <font>
+            <Font name="Arial Bold" size="36.0" />
+         </font>
+      </Label>
+      <Label layoutX="339.0" layoutY="64.0" text="All Weekly Badges since you joined">
+         <font>
+            <Font name="Arial" size="14.0" />
+         </font>
+      </Label>
+      <TableView fx:id="badgeTable" layoutX="14.0" layoutY="89.0" prefHeight="446.0" prefWidth="870.0" styleClass="cardfortable">
+        <columns>
+          <TableColumn fx:id="colWeek" prefWidth="200.0" text="Week" />
+          <TableColumn fx:id="colDateRange" prefWidth="260.0" text="Date Awarded" />
+          <TableColumn fx:id="colBadge" prefWidth="220.0" text="Badge Earned" />
+          <TableColumn fx:id="colBottles" prefWidth="190.0" text="Total Bottles Collected" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

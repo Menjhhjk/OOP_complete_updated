@@ -1,0 +1,191 @@
+.box:hover {
+    -fx-background-color:  #89c54c;
+}
+
+.somet:hover {
+    -fx-cursor: hand;
+}
+Button {
+    -fx-cursor: hand;
+    -fx-background-color: #99ff74;
+}
+
+Button:hover {
+    -fx-background-color: #6fae00;
+    -fx-cursor: hand;
+}
+.sbutton{
+    -fx-cursor: hand;
+    -fx-background-color: #ffb9a5;
+}
+
+.sbutton:hover{
+    -fx-cursor: hand;
+    -fx-background-color: #df9987;
+}
+.table-view {
+    -fx-background-color: #d8ddff;
+    -fx-border-color: transparent;
+
+}
+
+/* header */
+.table-view .column-header-background {
+    -fx-background-color: #e8f5e9;
+    -fx-background-radius: 30;
+}
+
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: #abc2f3;
+    -fx-size: 40px;
+
+}
+
+/* rows */
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+}
+
+/* hover row */
+.table-row-cell:hover {
+    -fx-background-color: #f1f8e9;
+}
+
+/* selected row */
+.table-row-cell:selected {
+    -fx-background-color: #c8e6c9;
+}
+
+/* cells */
+.table-cell {
+    -fx-padding: 8px;
+}
+
+.HBox {
+    -fx-background-radius: 0;
+}
+
+.HBox:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 4);
+    -fx-translate-y: -2;
+}
+
+.card {
+    -fx-border-color: #717171;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 30;
+    -fx-background-radius: 30;
+}
+
+.cardfortable{
+    -fx-border-color: #717171;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+}
+.scard {
+    -fx-border-color: #717171;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+}
+
+/* =========================
+   COMBOBOX BASE STYLE
+========================= */
+.combo-box {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10;
+    -fx-border-color: #dcdcdc;
+    -fx-border-radius: 10;
+    -fx-padding: 2;
+}
+
+/* hover effect */
+.combo-box:hover {
+    -fx-border-color: #9bb9ff;
+    -fx-cursor: hand;
+}
+
+/* focused (when clicked) */
+.combo-box:focused {
+    -fx-border-color: #9bb9ff;
+}
+
+/* =========================
+   DROPDOWN BUTTON ARROW AREA
+========================= */
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+
+/* arrow itself */
+.combo-box .arrow {
+    -fx-background-color: #9bb9ff;
+}
+
+/* =========================
+   LIST (DROPDOWN PANEL)
+========================= */
+.combo-box-popup .list-view {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #e0e0e0;
+}
+
+/* each item */
+.combo-box-popup .list-cell {
+    -fx-padding: 8 10;
+}
+
+/* hover item */
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #e8f5e9;
+}
+
+/* selected item */
+.combo-box-popup .list-cell:selected {
+    -fx-background-color: #c8e6c9;
+}
+
+/* =========================
+   TEXT FIELD
+========================= */
+.text-field {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #d9eec3;
+    -fx-border-width: 1.5;
+
+    -fx-padding: 0 12 0 12;
+
+    -fx-font-size: 14px;
+    -fx-text-fill: #2b2b2b;
+
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 4, 0, 0, 1);
+}
+
+/* hover */
+.text-field:hover {
+    -fx-border-color: #89c54c;
+}
+
+/* when typing / focused */
+.text-field:focused {
+    -fx-border-color: #1c5d2b;
+    -fx-background-color: #ffffff;
+
+    -fx-effect: dropshadow(gaussian, rgba(137,197,76,0.25), 8, 0, 0, 0);
+}
+
+/* placeholder text */
+.text-field .text {
+    -fx-fill: #2b2b2b;
+}
+
+.text-field:empty {
+    -fx-prompt-text-fill: #9aa89a;
+}

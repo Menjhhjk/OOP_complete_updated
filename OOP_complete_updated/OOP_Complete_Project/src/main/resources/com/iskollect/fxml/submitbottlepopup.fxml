@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="550.0" prefWidth="450.0" style="-fx-background-radius: 30;" styleClass="card" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.BottleSubmitController">
+   <children>
+      <Label layoutX="107.0" layoutY="14.0" text="Submit Bottle">
+         <font>
+            <Font name="Arial Bold" size="36.0" />
+         </font>
+      </Label>
+      <Label layoutX="114.0" layoutY="56.0" text="Enter the number of bottles you are">
+         <font>
+            <Font name="Arial" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="103.0" layoutY="72.0" text="submitting at the collection point today.">
+         <font>
+            <Font name="Arial" size="14.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="200.0" fitWidth="226.0" layoutX="113.0" layoutY="98.0" styleClass="HBox">
+         <image>
+            <Image url="@../assets/1.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="bottleCountField" layoutX="74.0" layoutY="309.0" prefHeight="78.0" prefWidth="300.0" style="-fx-background-radius: 20;">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </TextField>
+      <Label layoutX="101.0" layoutY="402.0" text="Only submit bottles you have physically">
+         <font>
+            <Font name="Arial" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="132.0" layoutY="420.0" text="brought to the collection point.">
+         <font>
+            <Font name="Arial" size="14.0" />
+         </font>
+      </Label>
+      <Button onAction="#handleCancel" layoutX="60.0" layoutY="464.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="144.0" style="-fx-background-radius: 20;" text="Cancel">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font>
+         <styleClass>
+            <String fx:value="nav-row" />
+            <String fx:value="card" />
+         </styleClass>
+      </Button>
+      <Button onAction="#submitBottles" layoutX="254.0" layoutY="464.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="144.0" style="-fx-background-radius: 20;" text="Submit">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font>
+         <styleClass>
+            <String fx:value="nav-row" />
+            <String fx:value="card" />
+         </styleClass>
+      </Button>
+      <Label fx:id="statusLabel" layoutX="20.0" layoutY="150.0" prefWidth="260.0" textFill="green" wrapText="true">
+         <font><Font name="Arial" size="12.0" /></font>
+      </Label>
+   </children>
+</AnchorPane>
