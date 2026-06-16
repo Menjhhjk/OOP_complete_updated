@@ -31,6 +31,7 @@ import javafx.stage.Stage;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class TransactionController {
@@ -48,7 +49,7 @@ public class TransactionController {
     @FXML private TableColumn<Redemption, Number>  colIndex;
     @FXML private TableColumn<Redemption, String>  colDateTime;
     @FXML private TableColumn<Redemption, String>  colCouponType;
-    @FXML private TableColumn<Redemption, Number>  colPointsUsed;
+    @FXML private TableColumn<Redemption, String>  colPointsUsed;
     @FXML private TableColumn<Redemption, String>  colUniqueCode;
     @FXML private TableColumn<Redemption, String>  colStatus;
 
@@ -98,7 +99,7 @@ public class TransactionController {
                             ? cell.getValue().getCouponName() : ""));
         if (colPointsUsed != null)
             colPointsUsed.setCellValueFactory(cell ->
-                    new SimpleIntegerProperty((int) cell.getValue().getPointsDeducted()));
+                    new SimpleStringProperty(formatPoints(cell.getValue().getPointsDeducted())));
         if (colUniqueCode != null)
             colUniqueCode.setCellValueFactory(cell ->
                     new SimpleStringProperty(cell.getValue().getCouponCode() != null
@@ -118,7 +119,7 @@ public class TransactionController {
             try {
                 List<Redemption> records = redemptionDAO.getByUserId(userId);
                 Platform.runLater(() -> {
-                    pointsLabel.setText(String.valueOf((int) points));
+                    pointsLabel.setText(formatPoints(points));
                     allData.setAll(records);
                     if (transactionTable != null) transactionTable.setItems(allData);
                     if (totalCouponsLabel != null)
@@ -208,6 +209,10 @@ public class TransactionController {
     private java.time.LocalDate parseDateFilter(String text) {
         if (text == null || "All".equals(text)) return null;
         return java.time.LocalDate.parse(text, DATE_FMT);
+    }
+
+    private String formatPoints(double points) {
+        return String.format(Locale.US, "%.2f", points);
     }
 
     // ── Navigation ────────────────────────────────────────────────────────

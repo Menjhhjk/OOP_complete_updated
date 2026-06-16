@@ -34,6 +34,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -42,7 +43,7 @@ public class BottleRecordsController {
     @FXML private TableView<BottleRecord> submissionTable;
     @FXML private TableColumn<BottleRecord, String>  colDate;
     @FXML private TableColumn<BottleRecord, Integer> colBottles;
-    @FXML private TableColumn<BottleRecord, Integer> colPoints;
+    @FXML private TableColumn<BottleRecord, String> colPoints;
 
     @FXML private Label dateTimeLabel;
 
@@ -99,8 +100,12 @@ public class BottleRecordsController {
         }
         if (colPoints != null) {
             colPoints.setCellValueFactory(cell ->
-                new SimpleIntegerProperty((int) cell.getValue().getPoints()).asObject());
+                new SimpleStringProperty(formatPoints(cell.getValue().getPoints())));
         }
+    }
+
+    private String formatPoints(double points) {
+        return String.format(Locale.US, "%.2f", points);
     }
 
     private void loadDataAsync() {

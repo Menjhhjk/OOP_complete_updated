@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 public class BottleSubmitController {
@@ -63,14 +64,14 @@ public class BottleSubmitController {
         bottleCountField.clear();
 
         StringBuilder msg = new StringBuilder();
-        msg.append("Earned ").append((int) result.getBasePoints()).append(" base pts");
+        msg.append("Earned ").append(formatPoints(result.getBasePoints())).append(" base pts");
         if (result.getStreakBonus() > 0) {
-            msg.append(" + ").append((int) result.getStreakBonus()).append(" streak bonus");
+            msg.append(" + ").append(formatPoints(result.getStreakBonus())).append(" streak bonus");
         }
         if (result.getBadgeBonus() > 0) {
-            msg.append(" + ").append((int) result.getBadgeBonus()).append(" badge bonus");
+            msg.append(" + ").append(formatPoints(result.getBadgeBonus())).append(" badge bonus");
         }
-        msg.append(" = ").append((int) result.getTotalPoints()).append(" pts total.");
+        msg.append(" = ").append(formatPoints(result.getTotalPoints())).append(" pts total.");
         msg.append(" Badge: ").append(result.getNewBadgeTier());
 
         SessionManager.notifyPointUpdate();
@@ -86,5 +87,9 @@ public class BottleSubmitController {
 
     private void setStatus(String message) {
         if (statusLabel != null) statusLabel.setText(message);
+    }
+
+    private String formatPoints(double points) {
+        return String.format(Locale.US, "%.2f", points);
     }
 }

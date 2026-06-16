@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class DashboardController {
@@ -56,7 +57,7 @@ public class DashboardController {
     @FXML private TableColumn<Redemption, Number> colIndex;
     @FXML private TableColumn<Redemption, String>  colDateTime;
     @FXML private TableColumn<Redemption, String>  colCouponType;
-    @FXML private TableColumn<Redemption, Number>  colPointsUsed;
+    @FXML private TableColumn<Redemption, String>  colPointsUsed;
     @FXML private TableColumn<Redemption, String>  colUniqueCode;
     @FXML private TableColumn<Redemption, String>  colStatus;
 
@@ -81,7 +82,7 @@ public class DashboardController {
         if (colCouponType != null)
             colCouponType.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getCouponName()));
         if (colPointsUsed != null)
-            colPointsUsed.setCellValueFactory(cell -> new SimpleIntegerProperty((int) cell.getValue().getPointsDeducted()));
+            colPointsUsed.setCellValueFactory(cell -> new SimpleStringProperty(formatPoints(cell.getValue().getPointsDeducted())));
         if (colUniqueCode != null)
             colUniqueCode.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getCouponCode()));
         if (colStatus != null)
@@ -118,7 +119,7 @@ public class DashboardController {
         }
 
         String name = user.getUsername();
-        int points = (int) user.getTotalPoints();
+        double points = user.getTotalPoints();
         int bottles = user.getRawBottleCount();
 
         Thread t = new Thread(() -> {
@@ -137,7 +138,7 @@ public class DashboardController {
                     }
                     setText(nameLabel, name);
                     setText(bottlesLabel, String.valueOf(bottles));
-                    setText(pointsLabel, String.valueOf(points));
+                    setText(pointsLabel, formatPoints(points));
                     setText(badgeLabel, badge);
                     setText(levelLabel, "Lvl. " + level);
                     setText(streakLabel, String.valueOf(streak));
@@ -168,6 +169,10 @@ public class DashboardController {
 
     private void setText(Label label, String text) {
         if (label != null) label.setText(text);
+    }
+
+    private String formatPoints(double points) {
+        return String.format(Locale.US, "%.2f", points);
     }
 
     @FXML

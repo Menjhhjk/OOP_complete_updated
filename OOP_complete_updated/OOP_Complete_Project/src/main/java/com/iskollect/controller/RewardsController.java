@@ -8,6 +8,7 @@ import com.iskollect.util.SceneCache;
 import com.iskollect.util.SessionManager;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
@@ -101,9 +102,13 @@ public class RewardsController {
 
         Platform.runLater(() -> {
             double points = user.getTotalPoints();
-            currentPointsLabel.setText((int) points + " points");
+            currentPointsLabel.setText(formatPoints(points) + " points");
             setButtonStates(points);
         });
+    }
+
+    private String formatPoints(double points) {
+        return String.format(Locale.US, "%.2f", points);
     }
 
     // ── Navigation ────────────────────────────────────────────────────────
