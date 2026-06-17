@@ -147,7 +147,7 @@
                      <children>
                         <VBox prefHeight="90.0" prefWidth="703.0">
                            <children>
-                              <Label fx:id="nameLabel" prefHeight="80.0" prefWidth="634.0" text="Pagbati, Iskolar ng  Bayan!">
+                              <Label fx:id="nameLabel" prefHeight="80.0" prefWidth="634.0" text="Pagbati, Iskolar ng Bayan!">
                                  <font>
                                     <Font name="Arial Bold" size="48.0" />
                                  </font>

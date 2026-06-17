@@ -158,7 +158,7 @@ public class BottleRecordsController {
         }
 
         if (bottleCountLabel != null) {
-            bottleCountLabel.setText(weeklyBottles + " of bottles");
+            bottleCountLabel.setText(weeklyBottles + " bottles");
         }
 
         if (nextTierName != null) {

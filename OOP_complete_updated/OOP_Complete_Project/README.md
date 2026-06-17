@@ -254,7 +254,6 @@ The application uses JDBC prepared statements in DAO classes to reduce SQL injec
 
 ## Known Limitations
 
-- Forgot Password currently collects a reset request but does not send an email or verification code. Full password recovery requires an external email or verification service.
 - Account deletion and record deletion are not available through the user interface.
 - Database credentials must be configured before running the application.
 - The schema document defines `inout_logs.action` for account/session events such as `LOGIN`, `LOGOUT`, `SESSION_TIMEOUT`, and `LOCK`. The current system now records `LOGIN`, `LOGOUT`, and `SESSION_TIMEOUT`, but it also keeps the existing ingress/egress monitoring values `INGRESS` and `EGRESS` because that module is already implemented in the codebase.

@@ -17,8 +17,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import javafx.animation.Timeline;
@@ -73,6 +75,8 @@ public class ProfileController {
         User user = SessionManager.getSession();
         if (user == null) return;
 
+        configureCircularProfilePicture();
+
         setLabel(webmailLabel,       user.getWebmail());
         setLabel(displayNameLabel,   user.getName());
         setLabel(usernameDisplayLabel, "@" + safeUsername(user.getUsername()));
@@ -90,7 +94,7 @@ public class ProfileController {
         if (photoPath != null && !photoPath.isBlank()) {
             File photoFile = new File(photoPath);
             if (photoFile.exists() && profilePicture != null) {
-                profilePicture.setImage(new Image(photoFile.toURI().toString()));
+                setProfileImage(new Image(photoFile.toURI().toString()));
             }
         }
 
@@ -178,7 +182,7 @@ public class ProfileController {
             Files.copy(selectedFile.toPath(), destPath, StandardCopyOption.REPLACE_EXISTING);
 
             userDAO.updateProfilePicture(user.getUserId(), destPath.toString());
-            profilePicture.setImage(new Image(destPath.toUri().toString()));
+            setProfileImage(new Image(destPath.toUri().toString()));
 
             System.out.println("Profile picture updated to: " + destPath.toString());
 
@@ -318,6 +322,48 @@ public class ProfileController {
             passwordStatusLabel.setText(message);
             passwordStatusLabel.setStyle(error ? "-fx-text-fill: #b00020;" : "-fx-text-fill: #1b6b1b;");
         }
+    }
+
+    private void configureCircularProfilePicture() {
+        if (profilePicture == null) return;
+
+        double size = Math.min(profilePicture.getFitWidth(), profilePicture.getFitHeight());
+        profilePicture.setFitWidth(size);
+        profilePicture.setFitHeight(size);
+        profilePicture.setPreserveRatio(true);
+        profilePicture.setSmooth(true);
+        profilePicture.setClip(new Circle(size / 2, size / 2, size / 2));
+
+        Image currentImage = profilePicture.getImage();
+        if (currentImage != null) {
+            cropProfileImageToCenter(currentImage);
+        }
+    }
+
+    private void setProfileImage(Image image) {
+        if (profilePicture == null || image == null) return;
+
+        profilePicture.setImage(image);
+        if (image.getWidth() > 0 && image.getHeight() > 0) {
+            cropProfileImageToCenter(image);
+        } else {
+            image.progressProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue.doubleValue() >= 1.0) {
+                    cropProfileImageToCenter(image);
+                }
+            });
+        }
+    }
+
+    private void cropProfileImageToCenter(Image image) {
+        double width = image.getWidth();
+        double height = image.getHeight();
+        if (width <= 0 || height <= 0) return;
+
+        double cropSize = Math.min(width, height);
+        double x = (width - cropSize) / 2;
+        double y = (height - cropSize) / 2;
+        profilePicture.setViewport(new Rectangle2D(x, y, cropSize, cropSize));
     }
 
     @FXML

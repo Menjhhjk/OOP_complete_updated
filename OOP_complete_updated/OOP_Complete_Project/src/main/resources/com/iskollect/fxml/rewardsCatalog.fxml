@@ -198,12 +198,12 @@
                                                 <Pane prefHeight="198.0" prefWidth="986.0" style="-fx-background-color: #ffe7b9; -fx-background-radius: 30;">
                                                    <children>
                                                       <!-- CHANGED: added fx:id="currentPointsLabel" -->
-                                                      <Label fx:id="currentPointsLabel" layoutX="717.0" layoutY="69.0" text="143 points">
+                                                      <Label fx:id="currentPointsLabel" alignment="CENTER" layoutX="430.0" layoutY="78.0" prefHeight="60.0" prefWidth="520.0" text="143 points" textAlignment="CENTER">
                                                          <font>
-                                                            <Font name="Arial Bold" size="50.0" />
+                                                            <Font name="Arial Bold" size="44.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label fx:id="statusLabel" layoutX="533.0" layoutY="145.0" text="Points will be deducted upon redemption">
+                                                      <Label fx:id="statusLabel" alignment="CENTER" layoutX="430.0" layoutY="145.0" prefWidth="520.0" text="Points will be deducted upon redemption" textAlignment="CENTER">
                                                          <font>
                                                             <Font size="18.0" />
                                                          </font>
@@ -213,7 +213,7 @@
                                                             <Image preserveRatio="true" requestedHeight="184.0" requestedWidth="184.0" smooth="true" url="@../assets/2.png" />
                                                          </image>
                                                       </ImageView>
-                                                      <Label layoutX="722.0" layoutY="47.0" prefHeight="27.0" prefWidth="250.0" text="Your current balance">
+                                                      <Label alignment="CENTER" layoutX="430.0" layoutY="43.0" prefHeight="35.0" prefWidth="520.0" text="Your current balance" textAlignment="CENTER">
                                                          <font>
                                                             <Font name="Arial Bold" size="24.0" />
                                                          </font>

@@ -92,6 +92,18 @@ Button:hover {
     -fx-background-radius: 15;
 }
 
+.filter-bar {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 15;
+}
+
+.filter-button {
+    -fx-background-color: #99ff74;
+    -fx-background-radius: 15;
+    -fx-padding: 0 14 0 14;
+    -fx-alignment: center;
+}
+
 /* =========================
    COMBOBOX BASE STYLE
 ========================= */

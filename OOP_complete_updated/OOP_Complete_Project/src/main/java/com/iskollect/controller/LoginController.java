@@ -9,9 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class LoginController {
@@ -68,28 +66,6 @@ public class LoginController {
     @FXML
     private void goToRegister() {
         loadScreen("signup.fxml");
-    }
-
-    @FXML
-    private void goToForgotPassword() {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Forgot Password");
-        dialog.setHeaderText("Password reset request");
-        dialog.setContentText("Enter your PUP webmail:");
-
-        Optional<String> result = dialog.showAndWait();
-        if (result.isEmpty()) {
-            return;
-        }
-
-        String email = result.get().trim();
-        if (!WEBMAIL_PATTERN.matcher(email).matches()) {
-            errorLabel.setText("Please use a valid PUP webmail address.");
-            return;
-        }
-
-        errorLabel.setStyle("-fx-text-fill: #1b6b1b;");
-        errorLabel.setText("Password reset request received for " + email + ". Please contact support for the verification code.");
     }
 
     private void loadScreen(String fxmlFile) {

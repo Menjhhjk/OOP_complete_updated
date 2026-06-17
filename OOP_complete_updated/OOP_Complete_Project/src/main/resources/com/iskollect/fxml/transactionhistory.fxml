@@ -224,7 +224,7 @@
                                                                   <Font name="Arial Bold" size="18.0" />
                                                                </font>
                                                             </Label>
-                                                            <Label fx:id="pointsLabel" prefHeight="74.0" prefWidth="82.0" text="##" textOverrun="CLIP">
+                                                            <Label fx:id="pointsLabel" prefHeight="74.0" prefWidth="150.0" text="##">
                                                                <font>
                                                                   <Font name="Arial Bold" size="64.0" />
                                                                </font>
@@ -262,7 +262,7 @@
                                                             <Font name="Arial Bold" size="24.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label prefHeight="22.0" prefWidth="127.0" text="you redeamed">
+                                                      <Label prefHeight="22.0" prefWidth="127.0" text="you redeemed">
                                                          <font>
                                                             <Font name="Arial Bold" size="18.0" />
                                                          </font>
@@ -285,7 +285,7 @@
                                           <Insets />
                                        </VBox.margin>
                                     </HBox>
-                                    <Pane prefHeight="46.0" prefWidth="1016.0" style="-fx-background-color: f0f0f0; -fx-background-radius: 10;" styleClass="card">
+                                    <Pane prefHeight="46.0" prefWidth="1016.0" style="-fx-background-color: #f0f0f0; -fx-background-radius: 10;" styleClass="card">
                                        <VBox.margin>
                                           <Insets left="35.0" right="35.0" top="8.0" />
                                        </VBox.margin>
@@ -304,7 +304,7 @@
                                           </Label>
                                           <ComboBox fx:id="fromDateFilter" layoutX="479.0" layoutY="6.0" prefWidth="150.0" promptText="mm/dd/yy" />
                                           <Label layoutX="653.0" layoutY="15.0" text="To:" />
-                                          <ComboBox fx:id="toDateFilter" layoutX="675.0" layoutY="6.0" prefWidth="150.0" promptText="mm/dd/yy/" />
+                                          <ComboBox fx:id="toDateFilter" layoutX="675.0" layoutY="6.0" prefWidth="150.0" promptText="mm/dd/yy" />
                                           <Button fx:id="clearFiltersButton" layoutX="882.0" layoutY="7.0" mnemonicParsing="false" onAction="#handleClearFilters" prefHeight="25.0" prefWidth="94.0" styleClass="card" text="Clear Filters" />
                                        </children>
                                     </Pane>

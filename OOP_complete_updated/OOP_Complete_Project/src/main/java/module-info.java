@@ -7,6 +7,5 @@ module com.iskollect.oop_complete_project {
     requires org.postgresql.jdbc;
     opens com.iskollect to javafx.fxml;
     opens com.iskollect.controller to javafx.fxml;
-    opens com.iskollect.fxml to javafx.fxml;
     exports com.iskollect;
 }
