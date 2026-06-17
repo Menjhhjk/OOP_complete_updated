@@ -22,6 +22,7 @@ public class User {
     private int failedLoginAttempts = 0;
     private String sessionToken;
     private LocalDateTime lastActivity;
+    private LocalDateTime createdAt;
 
     //for login
     public User(int id, String webmail, String password) {
@@ -200,5 +201,13 @@ public class User {
     }
     public void setLastActivity(LocalDateTime lastActivity) {
         this.lastActivity = lastActivity;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

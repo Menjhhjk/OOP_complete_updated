@@ -26,6 +26,8 @@ public class BadgeHistoryController {
 
     private final BadgeService badgeService = new BadgeService();
     private static final DateTimeFormatter DISPLAY_FMT = DateTimeFormatter.ofPattern("MMM d, yyyy");
+    private static final DateTimeFormatter WEEK_START_FMT = DateTimeFormatter.ofPattern("MMM d");
+    private static final DateTimeFormatter WEEK_END_FMT = DateTimeFormatter.ofPattern("MMM d, yyyy");
 
     @FXML
     public void initialize() {
@@ -37,7 +39,7 @@ public class BadgeHistoryController {
 
         colWeek.setCellValueFactory(cell -> {
             LocalDate ws = cell.getValue().getWeekStartDate();
-            return new SimpleStringProperty("Week of " + ws.format(DateTimeFormatter.ofPattern("MMM d")));
+            return new SimpleStringProperty(formatWeekRange(ws));
         });
         colDateRange.setCellValueFactory(cell ->
                 new SimpleStringProperty(cell.getValue().getDateAwarded().format(DISPLAY_FMT)));
@@ -45,6 +47,12 @@ public class BadgeHistoryController {
                 new SimpleStringProperty(cell.getValue().getBadgeName() + " Badge"));
         colBottles.setCellValueFactory(cell ->
                 new SimpleIntegerProperty(cell.getValue().getTotalBottles()).asObject());
+    }
+
+    private String formatWeekRange(LocalDate weekStart) {
+        if (weekStart == null) return "";
+        LocalDate weekEnd = weekStart.plusDays(6);
+        return weekStart.format(WEEK_START_FMT) + " - " + weekEnd.format(WEEK_END_FMT);
     }
 
     private void loadData() {

@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: #bef28a;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.RewardsController">
+<AnchorPane prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: #bef28a;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.RewardsController">
    <children>
       
                   <VBox prefHeight="768.0" prefWidth="300.0">
@@ -198,12 +198,12 @@
                                                 <Pane prefHeight="198.0" prefWidth="986.0" style="-fx-background-color: #ffe7b9; -fx-background-radius: 30;">
                                                    <children>
                                                       <!-- CHANGED: added fx:id="currentPointsLabel" -->
-                                                      <Label fx:id="currentPointsLabel" alignment="CENTER" layoutX="430.0" layoutY="78.0" prefHeight="60.0" prefWidth="520.0" text="143 points" textAlignment="CENTER">
+                                                      <Label fx:id="currentPointsLabel" alignment="BOTTOM_RIGHT" layoutX="415.0" layoutY="72.0" prefHeight="60.0" prefWidth="520.0" text="143 points" textAlignment="CENTER">
                                                          <font>
                                                             <Font name="Arial Bold" size="44.0" />
                                                          </font>
                                                       </Label>
-                                                      <Label fx:id="statusLabel" alignment="CENTER" layoutX="430.0" layoutY="145.0" prefWidth="520.0" text="Points will be deducted upon redemption" textAlignment="CENTER">
+                                                      <Label fx:id="statusLabel" alignment="BOTTOM_RIGHT" layoutX="382.0" layoutY="146.0" prefWidth="520.0" text="Points will be deducted upon redemption" textAlignment="CENTER">
                                                          <font>
                                                             <Font size="18.0" />
                                                          </font>
@@ -213,12 +213,12 @@
                                                             <Image preserveRatio="true" requestedHeight="184.0" requestedWidth="184.0" smooth="true" url="@../assets/2.png" />
                                                          </image>
                                                       </ImageView>
-                                                      <Label alignment="CENTER" layoutX="430.0" layoutY="43.0" prefHeight="35.0" prefWidth="520.0" text="Your current balance" textAlignment="CENTER">
+                                                      <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" layoutX="415.0" layoutY="37.0" prefHeight="35.0" prefWidth="520.0" text="Your current balance" textAlignment="CENTER">
                                                          <font>
                                                             <Font name="Arial Bold" size="24.0" />
                                                          </font>
                                                       </Label>
-                                                      <ImageView fitHeight="62.0" fitWidth="66.0" layoutX="902.0" layoutY="128.0">
+                                                      <ImageView fx:id="currentBadgeImageView" fitHeight="62.0" fitWidth="66.0" layoutX="902.0" layoutY="128.0">
                                                          <image>
                                                             <Image preserveRatio="true" requestedHeight="62.0" requestedWidth="66.0" smooth="true" url="@../assets/7.png" />
                                                          </image>

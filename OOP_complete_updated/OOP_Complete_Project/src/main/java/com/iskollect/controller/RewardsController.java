@@ -2,13 +2,16 @@ package com.iskollect.controller;
 
 import com.iskollect.model.RedeemResult;
 import com.iskollect.model.User;
+import com.iskollect.service.BadgeService;
 import com.iskollect.service.CouponService;
 import com.iskollect.util.ClockUtil;
 import com.iskollect.util.SceneCache;
 import com.iskollect.util.SessionManager;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
@@ -19,6 +22,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import java.io.IOException;
 
@@ -31,8 +36,11 @@ public class RewardsController {
     @FXML private Button redeemSnack2Btn;
     @FXML private Button redeemLunchBtn;
     @FXML private Label  statusLabel;
+    @FXML private ImageView currentBadgeImageView;
 
     private final CouponService couponService = new CouponService();
+    private final BadgeService badgeService = new BadgeService();
+    private static final Map<String, Image> IMAGE_CACHE = new HashMap<>();
 
     private static final int    SUPPLIES_ID   = 1;
     private static final int    SNACK_V1_ID   = 2;
@@ -104,7 +112,32 @@ public class RewardsController {
             double points = user.getTotalPoints();
             currentPointsLabel.setText(formatPoints(points) + " points");
             setButtonStates(points);
+            updateCurrentBadgeImage(user.getUserId());
         });
+    }
+
+    private void updateCurrentBadgeImage(int userId) {
+        if (currentBadgeImageView == null) return;
+
+        String badge = badgeService.getCurrentBadge(userId).getTierName();
+        String imagePath = badgeToImagePath(badge);
+        try {
+            Image img = IMAGE_CACHE.computeIfAbsent(imagePath, path ->
+                    new Image(getClass().getResourceAsStream(path), 66, 62, true, true));
+            currentBadgeImageView.setImage(img);
+        } catch (Exception e) {
+            System.err.println("Could not load rewards badge image: " + imagePath);
+        }
+    }
+
+    private String badgeToImagePath(String tierName) {
+        switch (tierName) {
+            case "Silver":        return "/com/iskollect/assets/6.png";
+            case "Emerald":       return "/com/iskollect/assets/emerald.png";
+            case "Gold":          return "/com/iskollect/assets/5.png";
+            case "Constellation": return "/com/iskollect/assets/4.png";
+            default:              return "/com/iskollect/assets/7.png";
+        }
     }
 
     private String formatPoints(double points) {

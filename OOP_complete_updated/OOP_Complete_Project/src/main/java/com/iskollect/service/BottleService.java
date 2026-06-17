@@ -58,6 +58,8 @@ public class BottleService {
 
             double basePoints = pointsService.calculateBasePoints(bottleCount);
             System.out.println("DEBUG [BottleService] basePoints=" + basePoints);
+            int previousBottleTotal = user.getRawBottleCount();
+            int newBottleTotal = previousBottleTotal + bottleCount;
 
             BottleRecord bottleRecord = new BottleRecord(
                     0, userId, bottleCount,
@@ -71,9 +73,9 @@ public class BottleService {
                     + " streak_after=" + user.getStreak()
                     + " totalPoints_after_streak=" + user.getTotalPoints());
 
-            BadgeService.BadgeResult badge = badgeService.evaluateBadge(user.getWeeklyBottles());
+            BadgeService.BadgeResult badge = badgeService.evaluateBadgeForBottles(newBottleTotal);
             double badgeBonus = 0;
-            if (badgeService.awardWeeklyBadge(userId, badge)) {
+            if (!badgeService.awardReachedBadges(userId, previousBottleTotal, newBottleTotal).isEmpty()) {
                 badgeBonus = badge.getBonusPoints();
             }
             System.out.println("DEBUG [BottleService] badge=" + badge.getTierName()
@@ -94,6 +96,7 @@ public class BottleService {
                     user.getWeeklyBottles(),
                     user.getStreak(),
                     user.getLastSubmitDate());
+            user.setRawBottleCount(newBottleTotal);
 
             double totalPoints = basePoints + streakBonus + badgeBonus;
             bottleRecord.setPoints(totalPoints);

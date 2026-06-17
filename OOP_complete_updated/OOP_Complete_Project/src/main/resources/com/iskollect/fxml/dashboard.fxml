@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: #bef28a;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.DashboardController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: #bef28a;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.DashboardController">
    <children>
       <VBox prefHeight="768.0" prefWidth="300.0">
          <children>
@@ -190,14 +190,14 @@
                            <children>
                               <HBox prefHeight="163.0" prefWidth="1056.0">
                                  <children>
-                                    <HBox prefHeight="162.0" prefWidth="449.0">
+                                    <HBox prefHeight="163.0" prefWidth="529.0">
                                        <children>
-                                          <HBox prefHeight="144.0" prefWidth="400.0" style="-fx-background-color: #e2ffff; -fx-background-radius: 30;" stylesheets="@../style.css">
+                                          <HBox prefHeight="146.0" prefWidth="484.0" style="-fx-background-color: #e2ffff; -fx-background-radius: 30;" stylesheets="@../style.css">
                                              <padding>
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </padding>
                                              <HBox.margin>
-                                                <Insets bottom="7.0" left="35.0" right="10.0" top="10.0" />
+                                                <Insets bottom="7.0" left="47.0" right="10.0" top="10.0" />
                                              </HBox.margin>
                                              <children>
                                                 <ImageView fitHeight="123.0" fitWidth="154.0">
@@ -205,7 +205,7 @@
                                                 <Image preserveRatio="true" requestedHeight="123.0" requestedWidth="154.0" smooth="true" url="@../assets/1.png" />
                                                    </image>
                                                 </ImageView>
-                                                <VBox alignment="BOTTOM_RIGHT" prefHeight="123.0" prefWidth="211.0">
+                                                <VBox alignment="BOTTOM_RIGHT" prefHeight="123.0" prefWidth="281.0">
                                                    <children>
                                                       <Label fx:id="bottlesLabel" text="##">
                                                          <font>
@@ -215,6 +215,11 @@
                                                       <Label prefHeight="27.0" prefWidth="203.0" text="Total Bottles Collected">
                                                          <font>
                                                             <Font name="Arial" size="20.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="Clean bottles submitted so far" textFill="#2f6060">
+                                                         <font>
+                                                            <Font name="Arial" size="11.0" />
                                                          </font>
                                                       </Label>
                                                    </children>
@@ -230,7 +235,7 @@
                                           </HBox>
                                        </children>
                                     </HBox>
-                                    <HBox prefHeight="170.0" prefWidth="400.0" style="-fx-background-color: #fff3d5; -fx-background-radius: 30;" stylesheets="@../style.css">
+                                    <HBox prefHeight="170.0" prefWidth="470.0" style="-fx-background-color: #fff3d5; -fx-background-radius: 30;" stylesheets="@../style.css">
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
@@ -243,7 +248,7 @@
                                                 <Image preserveRatio="true" requestedHeight="122.0" requestedWidth="121.0" smooth="true" url="@../assets/2.png" />
                                              </image>
                                           </ImageView>
-                                          <VBox alignment="BOTTOM_RIGHT" prefHeight="123.0" prefWidth="246.0">
+                                          <VBox alignment="BOTTOM_RIGHT" prefHeight="123.0" prefWidth="316.0">
                                              <children>
                                                 <Label fx:id="pointsLabel" text="##">
                                                    <font>
@@ -253,6 +258,11 @@
                                                 <Label text="Total Points">
                                                    <font>
                                                       <Font name="Arial" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="1 bottle = 0.50 pts, plus streak bonuses" textFill="#6b5522">
+                                                   <font>
+                                                      <Font name="Arial" size="11.0" />
                                                    </font>
                                                 </Label>
                                              </children>
@@ -270,12 +280,12 @@
                               </HBox>
                               <HBox prefHeight="170.0" prefWidth="200.0">
                                  <children>
-                                    <HBox prefHeight="170.0" prefWidth="400.0" style="-fx-background-color: #f1ffd7; -fx-background-radius: 30;" stylesheets="@../style.css">
+                                    <HBox prefHeight="170.0" prefWidth="470.0" style="-fx-background-color: #f1ffd7; -fx-background-radius: 30;" stylesheets="@../style.css">
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
                                        <HBox.margin>
-                                          <Insets bottom="7.0" left="35.0" right="10.0" top="10.0" />
+                                          <Insets bottom="7.0" left="47.0" right="10.0" top="10.0" />
                                        </HBox.margin>
                                        <children>
                                           <ImageView fitHeight="129.0" fitWidth="129.0">
@@ -283,7 +293,7 @@
                                                 <Image preserveRatio="true" requestedHeight="129.0" requestedWidth="129.0" smooth="true" url="@../assets/3.png" />
                                              </image>
                                           </ImageView>
-                                          <VBox alignment="BOTTOM_RIGHT" prefHeight="131.0" prefWidth="238.0">
+                                          <VBox alignment="BOTTOM_RIGHT" prefHeight="131.0" prefWidth="308.0">
                                              <children>
                                                 <Label fx:id="streakLabel" text="##">
                                                    <font>
@@ -295,6 +305,16 @@
                                                       <Font name="Arial" size="24.0" />
                                                    </font>
                                                 </Label>
+                                                <Label text="Submit bottles on consecutive days" textFill="#4d5f35">
+                                                   <font>
+                                                      <Font name="Arial" size="11.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="3 days: +50% pts | 5+ days: +100% pts" textFill="#4d5f35">
+                                                   <font>
+                                                      <Font name="Arial Bold" size="11.0" />
+                                                   </font>
+                                                </Label>
                                              </children>
                                           </VBox>
                                        </children>
@@ -303,7 +323,7 @@
                                           <String fx:value="nav-row" />
                                        </styleClass>
                                     </HBox>
-                                    <HBox prefHeight="170.0" prefWidth="400.0" style="-fx-background-color: #eeefff; -fx-background-radius: 30;" stylesheets="@../style.css">
+                                    <HBox prefHeight="170.0" prefWidth="470.0" style="-fx-background-color: #eeefff; -fx-background-radius: 30;" stylesheets="@../style.css">
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
@@ -316,7 +336,7 @@
                                                 <Image preserveRatio="true" requestedHeight="129.0" requestedWidth="135.0" smooth="true" url="@../assets/7.png" />
                                              </image>
                                           </ImageView>
-                                          <VBox alignment="BOTTOM_RIGHT" prefHeight="131.0" prefWidth="232.0">
+                                          <VBox alignment="BOTTOM_RIGHT" prefHeight="131.0" prefWidth="302.0">
                                              <children>
                                                 <Label fx:id="levelLabel" text="Lvl. 1">
                                                    <font>
@@ -326,6 +346,26 @@
                                                 <Label fx:id="badgeLabel" text="Bronze">
                                                    <font>
                                                       <Font name="Arial" size="24.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Your badge grows with collected bottles" textFill="#565878">
+                                                   <font>
+                                                      <Font name="Arial" size="11.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label prefHeight="14.0" prefWidth="214.0" text="1-5 bottles - Bronze | 6-10 bottles - Silver" textFill="#565878">
+                                                   <font>
+                                                      <Font name="Arial Bold" size="11.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label prefHeight="14.0" prefWidth="235.0" text=" 11-20 bottles - Emerald | 21-30 bottles - Gold" textFill="#565878">
+                                                   <font>
+                                                      <Font name="Arial Bold" size="11.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="31+ bottles - Constellation" textFill="#565878">
+                                                   <font>
+                                                      <Font name="Arial Bold" size="11.0" />
                                                    </font>
                                                 </Label>
                                              </children>
@@ -338,15 +378,15 @@
                                     </HBox>
                                  </children>
                               </HBox>
-                              <VBox prefHeight="314.0" prefWidth="923.0" style="-fx-background-color: #f0f0f0; -fx-background-radius: 20;" styleClass="card" stylesheets="@../style.css">
+                              <VBox prefHeight="314.0" prefWidth="995.0" style="-fx-background-color: #f0f0f0; -fx-background-radius: 20;" styleClass="card" stylesheets="@../style.css">
                                  <padding>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </padding>
                                  <VBox.margin>
-                                    <Insets left="40.0" right="40.0" top="10.0" />
+                                    <Insets left="35.0" right="35.0" top="10.0" />
                                  </VBox.margin>
                                  <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="56.0" prefWidth="955.0">
+                                    <HBox alignment="CENTER_LEFT" prefHeight="56.0" prefWidth="975.0">
                                        <children>
                                           <Label text="Recent Transactions">
                                              <font>
@@ -357,18 +397,9 @@
                                              </HBox.margin>
                                           </Label>
                                           <HBox prefHeight="56.0" prefWidth="658.0" />
-                                          <Label text="View all">
-                                             <font>
-                                                <Font name="Arial Bold" size="18.0" />
-                                             </font>
-                                             <styleClass>
-                                                <String fx:value="somet" />
-                                                <String fx:value="nav-row" />
-                                             </styleClass>
-                                          </Label>
                                        </children>
                                     </HBox>
-                                    <TableView fx:id="transactionTable" prefHeight="233.0" prefWidth="955.0" stylesheets="@../style.css">
+                                    <TableView fx:id="transactionTable" prefHeight="233.0" prefWidth="975.0" stylesheets="@../style.css">
                                       <columns>
                                         <TableColumn fx:id="colIndex" prefWidth="90.0" text="#" />
                                         <TableColumn fx:id="colDateTime" prefWidth="190.0" text="Date &amp; Time" />

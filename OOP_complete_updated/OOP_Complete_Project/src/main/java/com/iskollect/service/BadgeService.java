@@ -9,6 +9,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BadgeService {
@@ -23,16 +24,20 @@ public class BadgeService {
     }
 
     public BadgeResult evaluateBadge(int weeklyBottles) {
-        if (weeklyBottles >= 31) {
+        return evaluateBadgeForBottles(weeklyBottles);
+    }
+
+    public BadgeResult evaluateBadgeForBottles(int bottleCount) {
+        if (bottleCount >= 31) {
             return new BadgeResult("Constellation", 10);
         }
-        if (weeklyBottles >= 21) {
+        if (bottleCount >= 21) {
             return new BadgeResult("Gold", 5);
         }
-        if (weeklyBottles >= 11) {
+        if (bottleCount >= 11) {
             return new BadgeResult("Emerald", 3);
         }
-        if (weeklyBottles >= 6) {
+        if (bottleCount >= 6) {
             return new BadgeResult("Silver", 1);
         }
         return new BadgeResult("Bronze", 0);
@@ -41,9 +46,23 @@ public class BadgeService {
     public BadgeResult getCurrentBadge(int userId) {
         try {
             User user = userDAO.findById(userId);
-            return user == null ? new BadgeResult("Bronze", 0) : evaluateBadge(user.getWeeklyBottles());
+            return user == null ? new BadgeResult("Bronze", 0) : evaluateBadgeForBottles(user.getRawBottleCount());
         } catch (DatabaseException e) {
             return new BadgeResult("Bronze", 0);
+        }
+    }
+
+    public int getBadgeLevel(BadgeResult badge) {
+        if (badge == null || badge.getTierName() == null) {
+            return 0;
+        }
+        switch (badge.getTierName()) {
+            case "Constellation": return 5;
+            case "Gold": return 4;
+            case "Emerald": return 3;
+            case "Silver": return 2;
+            case "Bronze": return 1;
+            default: return 0;
         }
     }
 
@@ -56,22 +75,66 @@ public class BadgeService {
     }
 
     public boolean awardWeeklyBadge(int userId, BadgeResult badge) throws DatabaseException {
+        return awardBadge(userId, badge, LocalDate.now());
+    }
+
+    private boolean awardBadge(int userId, BadgeResult badge, LocalDate dateAwarded) throws DatabaseException {
         String sql = "INSERT INTO user_badges (user_id, badge_id, date_awarded, week_start_date) "
                 + "SELECT ?, badge_id, ?, DATE_TRUNC('week', ?::date)::date "
-                + "FROM badges WHERE badge_name = ?";
-        LocalDate today = LocalDate.now();
+                + "FROM badges b WHERE b.badge_name = ? "
+                + "AND NOT EXISTS ("
+                + "SELECT 1 FROM user_badges ub "
+                + "WHERE ub.user_id = ? AND ub.badge_id = b.badge_id"
+                + ")";
         try (PreparedStatement ps = DBConnection.getInstance().getConnection().prepareStatement(sql)) {
             ps.setInt(1, userId);
-            ps.setDate(2, Date.valueOf(today));
-            ps.setDate(3, Date.valueOf(today));
+            ps.setDate(2, Date.valueOf(dateAwarded));
+            ps.setDate(3, Date.valueOf(dateAwarded));
             ps.setString(4, badge.getTierName());
+            ps.setInt(5, userId);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DatabaseException("Failed to award weekly badge.", e);
         }
     }
 
+    public boolean awardBadgeOnPromotion(int userId, BadgeResult previousBadge, BadgeResult newBadge)
+            throws DatabaseException {
+        if (getBadgeLevel(newBadge) <= getBadgeLevel(previousBadge)) {
+            return false;
+        }
+        return awardWeeklyBadge(userId, newBadge);
+    }
+
+    public List<BadgeResult> awardReachedBadges(int userId, int previousBottleCount, int newBottleCount)
+            throws DatabaseException {
+        List<BadgeResult> awarded = new ArrayList<>();
+        int previousLevel = getBadgeLevel(evaluateBadgeForBottles(previousBottleCount));
+        int newLevel = getBadgeLevel(evaluateBadgeForBottles(newBottleCount));
+
+        for (BadgeResult badge : getBadgeTiers()) {
+            int level = getBadgeLevel(badge);
+            if ((newBottleCount > 0 && level == 1) || (level > previousLevel && level <= newLevel)) {
+                if (awardWeeklyBadge(userId, badge)) {
+                    awarded.add(badge);
+                }
+            }
+        }
+        return awarded;
+    }
+
+    public List<BadgeResult> getBadgeTiers() {
+        return List.of(
+                new BadgeResult("Bronze", 0),
+                new BadgeResult("Silver", 1),
+                new BadgeResult("Emerald", 3),
+                new BadgeResult("Gold", 5),
+                new BadgeResult("Constellation", 10)
+        );
+    }
+
     public List<BadgeHistoryEntry> getBadgeHistory(int userId, int limit) {
+        syncEarnedBadgeHistory(userId);
         String sql = "SELECT b.badge_name, ub.date_awarded, ub.week_start_date, "
                 + "COALESCE((SELECT SUM(br.bottles_collected) FROM bottle_records br "
                 + "WHERE br.user_id = ub.user_id AND br.week_start_date = ub.week_start_date), 0) AS total_bottles "
@@ -101,6 +164,7 @@ public class BadgeService {
     }
 
     public List<BadgeHistoryEntry> getAllBadgeHistory(int userId) {
+        syncEarnedBadgeHistory(userId);
         String sql = "SELECT b.badge_name, ub.date_awarded, ub.week_start_date, "
                 + "COALESCE((SELECT SUM(br.bottles_collected) FROM bottle_records br "
                 + "WHERE br.user_id = ub.user_id AND br.week_start_date = ub.week_start_date), 0) AS total_bottles "
@@ -125,6 +189,40 @@ public class BadgeService {
             System.err.println("getAllBadgeHistory failed: " + e.getMessage());
         }
         return result;
+    }
+
+    private void syncEarnedBadgeHistory(int userId) {
+        String sql = "WITH running AS ("
+                + "SELECT collection_date, "
+                + "SUM(bottles_collected) OVER (ORDER BY collection_date, record_id) AS total_bottles "
+                + "FROM bottle_records WHERE user_id = ?"
+                + ") SELECT MIN(collection_date) AS reached_date FROM running WHERE total_bottles >= ?";
+
+        for (BadgeResult badge : getBadgeTiers()) {
+            int threshold = getBadgeThreshold(badge.getTierName());
+            try (PreparedStatement ps = DBConnection.getInstance().getConnection().prepareStatement(sql)) {
+                ps.setInt(1, userId);
+                ps.setInt(2, threshold);
+                try (java.sql.ResultSet rs = ps.executeQuery()) {
+                    if (rs.next() && rs.getDate("reached_date") != null) {
+                        awardBadge(userId, badge, rs.getDate("reached_date").toLocalDate());
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("syncEarnedBadgeHistory failed for " + badge.getTierName()
+                        + ": " + e.getMessage());
+            }
+        }
+    }
+
+    private int getBadgeThreshold(String tierName) {
+        switch (tierName) {
+            case "Silver":        return 6;
+            case "Emerald":       return 11;
+            case "Gold":          return 21;
+            case "Constellation": return 31;
+            default:              return 1;
+        }
     }
 
     public static final class BadgeHistoryEntry {

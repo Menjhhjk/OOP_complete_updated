@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: #bef28a;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.ProfileController">
+<AnchorPane prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: #bef28a;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.ProfileController">
    <children>
       
                   <VBox prefHeight="768.0" prefWidth="300.0">
@@ -204,7 +204,7 @@
                                                 <Font name="Arial Bold" size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label fx:id="webmailLabel" layoutX="34.0" layoutY="49.0" text="johndoe@iskolarngbayan.pup.edu.ph">
+                                          <Label fx:id="webmailLabel" layoutX="29.0" layoutY="49.0" text="johndoe@iskolarngbayan.pup.edu.ph">
                                              <font>
                                                 <Font name="Arial" size="14.0" />
                                              </font>
@@ -214,49 +214,49 @@
                                                 <Font name="Arial Bold" size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label fx:id="memberSinceLabel" layoutX="34.0" layoutY="104.0" text="September 2024">
+                                          <Label fx:id="memberSinceLabel" layoutX="27.0" layoutY="104.0" text="">
                                              <font>
                                                 <Font name="Arial" size="14.0" />
                                              </font>
                                           </Label>
-                                          <Label layoutX="24.0" layoutY="146.0" text="Total Bottles Collected">
+                                          <Label layoutX="23.0" layoutY="143.0" text="Total Bottles Collected">
                                              <font>
                                                 <Font name="Arial Bold" size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label fx:id="totalBottlesLabel" layoutX="34.0" layoutY="176.0" text="##">
+                                          <Label fx:id="totalBottlesLabel" layoutX="25.0" layoutY="171.0" text="##">
                                              <font>
                                                 <Font name="Arial" size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label layoutX="24.0" layoutY="211.0" text="Coupons redeemed">
+                                          <Label layoutX="22.0" layoutY="201.0" text="Coupons redeemed">
                                              <font>
                                                 <Font name="Arial Bold" size="18.0" />
                                              </font>
                                           </Label>
-                                          <Label fx:id="couponsRedeemedLabel" layoutX="34.0" layoutY="238.0" text="##">
+                                          <Label fx:id="couponsRedeemedLabel" layoutX="25.0" layoutY="229.0" text="##">
                                              <font>
                                                 <Font name="Arial" size="18.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </Pane>
-                                    <Label fx:id="displayNameLabel" alignment="CENTER" layoutX="22.0" layoutY="167.0" prefWidth="365.0" text="John Doe" textAlignment="CENTER">
+                                    <Label fx:id="displayNameLabel" alignment="CENTER" layoutX="27.0" layoutY="167.0" prefWidth="365.0" text="John Doe" textAlignment="CENTER">
                                        <font>
                                           <Font name="Arial Bold" size="24.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="badgeLevelLabel" alignment="CENTER" layoutX="22.0" layoutY="213.0" prefWidth="365.0" text="Badge level" textAlignment="CENTER">
+                                    <Label fx:id="badgeLevelLabel" alignment="CENTER" layoutX="28.0" layoutY="213.0" prefWidth="365.0" text="Badge level" textAlignment="CENTER">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <ImageView fx:id="profilePicture" fitHeight="151.0" fitWidth="151.0" layoutX="129.0" layoutY="14.0">
+                                    <ImageView fx:id="profilePicture" fitHeight="151.0" fitWidth="151.0" layoutX="131.0" layoutY="14.0">
                                        <image>
                                     <Image preserveRatio="true" requestedHeight="151.0" requestedWidth="151.0" smooth="true" url="@../assets/2.png" />
                                        </image>
                                     </ImageView>
-                                    <Label fx:id="usernameDisplayLabel" alignment="CENTER" layoutX="22.0" layoutY="189.0" prefWidth="365.0" text="\@username" textAlignment="CENTER">
+                                    <Label fx:id="usernameDisplayLabel" alignment="CENTER" layoutX="25.0" layoutY="189.0" prefWidth="365.0" text="\@username" textAlignment="CENTER">
                                        <font>
                                           <Font size="16.0" />
                                        </font>

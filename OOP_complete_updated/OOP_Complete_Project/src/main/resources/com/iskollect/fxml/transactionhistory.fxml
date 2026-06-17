@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: #bef28a;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.TransactionController">
+<AnchorPane prefHeight="768.0" prefWidth="1366.0" style="-fx-background-color: #bef28a;" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iskollect.controller.TransactionController">
    <children>
       
                   <VBox prefHeight="768.0" prefWidth="300.0">
@@ -197,14 +197,14 @@
                                  <children>
                                     <HBox prefHeight="163.0" prefWidth="1056.0">
                                        <children>
-                                          <HBox prefHeight="163.0" prefWidth="498.0">
+                                          <HBox prefHeight="175.0" prefWidth="538.0">
                                              <children>
-                                                <HBox prefHeight="146.0" prefWidth="452.0" style="-fx-background-color: #fff3d5; -fx-background-radius: 30;">
+                                                <HBox prefHeight="158.0" prefWidth="497.0" style="-fx-background-color: #fff3d5; -fx-background-radius: 30;">
                                                    <padding>
                                                       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                    </padding>
                                                    <HBox.margin>
-                                                      <Insets bottom="7.0" left="35.0" right="10.0" top="10.0" />
+                                                      <Insets bottom="7.0" left="45.0" right="10.0" top="10.0" />
                                                    </HBox.margin>
                                                    <children>
                                                       <ImageView fitHeight="132.0" fitWidth="136.0">
@@ -212,19 +212,19 @@
                                                 <Image preserveRatio="true" requestedHeight="132.0" requestedWidth="136.0" smooth="true" url="@../assets/2.png" />
                                                          </image>
                                                       </ImageView>
-                                                      <VBox alignment="BOTTOM_RIGHT" prefHeight="135.0" prefWidth="286.0">
+                                                      <VBox alignment="BOTTOM_RIGHT" prefHeight="135.0" prefWidth="315.0">
                                                          <children>
                                                             <Label prefHeight="27.0" prefWidth="137.0" text="Total Points" textAlignment="RIGHT">
                                                                <font>
                                                                   <Font name="Arial Bold" size="24.0" />
                                                                </font>
                                                             </Label>
-                                                            <Label prefHeight="22.0" prefWidth="110.0" text="you earned">
+                                                            <Label prefHeight="22.0" prefWidth="98.0" text="you earned">
                                                                <font>
                                                                   <Font name="Arial Bold" size="18.0" />
                                                                </font>
                                                             </Label>
-                                                            <Label fx:id="pointsLabel" prefHeight="74.0" prefWidth="150.0" text="##">
+                                                            <Label fx:id="pointsLabel" prefHeight="74.0" prefWidth="75.0" text="##">
                                                                <font>
                                                                   <Font name="Arial Bold" size="64.0" />
                                                                </font>
@@ -242,20 +242,20 @@
                                                 </HBox>
                                              </children>
                                           </HBox>
-                                          <HBox prefHeight="163.0" prefWidth="454.0" style="-fx-background-color: #e2ffff; -fx-background-radius: 30;">
+                                          <HBox alignment="CENTER" prefHeight="158.0" prefWidth="470.0" style="-fx-background-color: #e2ffff; -fx-background-radius: 30;">
                                              <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                <Insets bottom="10.0" right="10.0" top="10.0" />
                                              </padding>
                                              <HBox.margin>
-                                                <Insets bottom="7.0" left="10.0" top="10.0" />
+                                                <Insets bottom="7.0" top="10.0" />
                                              </HBox.margin>
                                              <children>
-                                                <ImageView fitHeight="135.0" fitWidth="154.0">
+                                                <ImageView fitHeight="135.0" fitWidth="154.0" nodeOrientation="INHERIT">
                                                    <image>
                                                 <Image preserveRatio="true" requestedHeight="135.0" requestedWidth="154.0" smooth="true" url="@../assets/1.png" />
                                                    </image>
                                                 </ImageView>
-                                                <VBox alignment="BOTTOM_RIGHT" prefHeight="123.0" prefWidth="246.0">
+                                                <VBox alignment="BOTTOM_RIGHT" prefHeight="123.0" prefWidth="262.0">
                                                    <children>
                                                       <Label text="Total Coupons">
                                                          <font>
@@ -285,7 +285,7 @@
                                           <Insets />
                                        </VBox.margin>
                                     </HBox>
-                                    <Pane prefHeight="46.0" prefWidth="1016.0" style="-fx-background-color: #f0f0f0; -fx-background-radius: 10;" styleClass="card">
+                                    <Pane prefHeight="46.0" prefWidth="976.0" style="-fx-background-color: #f0f0f0; -fx-background-radius: 10;" styleClass="card">
                                        <VBox.margin>
                                           <Insets left="35.0" right="35.0" top="8.0" />
                                        </VBox.margin>
@@ -305,7 +305,7 @@
                                           <ComboBox fx:id="fromDateFilter" layoutX="479.0" layoutY="6.0" prefWidth="150.0" promptText="mm/dd/yy" />
                                           <Label layoutX="653.0" layoutY="15.0" text="To:" />
                                           <ComboBox fx:id="toDateFilter" layoutX="675.0" layoutY="6.0" prefWidth="150.0" promptText="mm/dd/yy" />
-                                          <Button fx:id="clearFiltersButton" layoutX="882.0" layoutY="7.0" mnemonicParsing="false" onAction="#handleClearFilters" prefHeight="25.0" prefWidth="94.0" styleClass="card" text="Clear Filters" />
+                                          <Button fx:id="clearFiltersButton" layoutX="856.0" layoutY="7.0" mnemonicParsing="false" onAction="#handleClearFilters" prefHeight="25.0" prefWidth="94.0" styleClass="card" text="Clear Filters" />
                                        </children>
                                     </Pane>
                                     <VBox prefHeight="404.0" prefWidth="976.0" style="-fx-background-color: #f0f0f0; -fx-background-radius: 20;">
@@ -313,7 +313,7 @@
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
                                        <VBox.margin>
-                                          <Insets left="40.0" right="40.0" top="15.0" />
+                                          <Insets left="35.0" right="35.0" top="15.0" />
                                        </VBox.margin>
                                        <children>
                                           <TableView fx:id="transactionTable" prefHeight="381.0" prefWidth="955.0">

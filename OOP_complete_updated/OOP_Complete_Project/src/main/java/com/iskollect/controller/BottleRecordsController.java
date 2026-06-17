@@ -32,7 +32,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.WeekFields;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -90,9 +95,7 @@ public class BottleRecordsController {
 
         if (colDate != null) {
             colDate.setCellValueFactory(cell ->
-                new SimpleStringProperty(
-                    cell.getValue().getDate() != null
-                        ? cell.getValue().getDate().format(DATE_FMT) : ""));
+                new SimpleStringProperty(formatTableDate(cell.getValue())));
         }
         if (colBottles != null) {
             colBottles.setCellValueFactory(cell ->
@@ -108,6 +111,14 @@ public class BottleRecordsController {
         return String.format(Locale.US, "%.2f", points);
     }
 
+    private String formatTableDate(BottleRecord record) {
+        if (record == null) return "";
+        if (record.getDisplayDate() != null && !record.getDisplayDate().isBlank()) {
+            return record.getDisplayDate();
+        }
+        return record.getDate() != null ? record.getDate().format(DATE_FMT) : "";
+    }
+
     private void loadDataAsync() {
         User user = SessionManager.getSession();
         if (user == null) return;
@@ -116,25 +127,25 @@ public class BottleRecordsController {
         Thread t = new Thread(() -> {
             List<BottleRecord> list = bottleService.getBottleHistory(userId);
 
-            int weeklyBottles = 0;
+            int totalBottles = 0;
             try {
                 User fresh = userDAO.findById(userId);
-                if (fresh != null) weeklyBottles = fresh.getWeeklyBottles();
+                if (fresh != null) totalBottles = fresh.getRawBottleCount();
             } catch (DatabaseException e) {
-                System.err.println("Could not fetch weekly bottles: " + e.getMessage());
+                System.err.println("Could not fetch total bottles: " + e.getMessage());
             }
 
             List<BadgeService.BadgeHistoryEntry> history = badgeService.getBadgeHistory(userId, 3);
 
-            final int weekly = weeklyBottles;
+            final int total = totalBottles;
             final List<BadgeService.BadgeHistoryEntry> bHistory = history;
 
             Platform.runLater(() -> {
                 allData.setAll(list);
                 if (submissionTable != null) {
-                    submissionTable.setItems(allData);
+                    filterAll();
                 }
-                updateStatsBanner(weekly);
+                updateStatsBanner(total);
                 updateBadgeHistory(bHistory);
             });
         });
@@ -142,9 +153,9 @@ public class BottleRecordsController {
         t.start();
     }
 
-    private void updateStatsBanner(int weeklyBottles) {
+    private void updateStatsBanner(int totalBottles) {
 
-        BadgeService.BadgeResult current = badgeService.evaluateBadge(weeklyBottles);
+        BadgeService.BadgeResult current = badgeService.evaluateBadgeForBottles(totalBottles);
         String currentTier = current.getTierName();
 
         int nextThreshold = -1;
@@ -158,12 +169,12 @@ public class BottleRecordsController {
         }
 
         if (bottleCountLabel != null) {
-            bottleCountLabel.setText(weeklyBottles + " bottles");
+            bottleCountLabel.setText(totalBottles + " bottles");
         }
 
         if (nextTierName != null) {
-            int bottlesNeeded = nextThreshold - weeklyBottles;
-            double progress = (double) weeklyBottles / nextThreshold;
+            int bottlesNeeded = nextThreshold - totalBottles;
+            double progress = (double) totalBottles / nextThreshold;
             int pct = (int) Math.round(progress * 100);
 
             if (bottlesNeededLabel != null)
@@ -240,21 +251,60 @@ public class BottleRecordsController {
         }
     }
 
-    @FXML private void filterDay()   { filterByDate(LocalDate.now(), LocalDate.now()); }
+    @FXML private void filterDay() {
+        filterByDate(LocalDate.now(), LocalDate.now());
+    }
 
     @FXML private void filterWeek() {
         LocalDate today = LocalDate.now();
-        filterByDate(today.minusDays(today.getDayOfWeek().getValue() - 1L), today);
+        LocalDate from = today.minusDays(today.getDayOfWeek().getValue() - 1L);
+        Map<LocalDate, List<BottleRecord>> recordsByDay = recordsBetween(from, today).stream()
+                .collect(Collectors.groupingBy(
+                        BottleRecord::getDate,
+                        LinkedHashMap::new,
+                        Collectors.toList()));
+
+        List<BottleRecord> summaryRows = recordsByDay.entrySet().stream()
+                .sorted(Map.Entry.<LocalDate, List<BottleRecord>>comparingByKey().reversed())
+                .map(entry -> summaryRow(weekLabel(entry.getKey(), today), entry.getValue(), entry.getKey()))
+                .collect(Collectors.toList());
+        setSummaryRows(summaryRows);
     }
 
     @FXML private void filterMonth() {
         LocalDate today = LocalDate.now();
-        filterByDate(today.withDayOfMonth(1), today);
+        LocalDate from = today.withDayOfMonth(1);
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        Map<Integer, List<BottleRecord>> recordsByWeek = recordsBetween(from, today).stream()
+                .collect(Collectors.groupingBy(
+                        record -> record.getDate().get(weekFields.weekOfMonth()),
+                        LinkedHashMap::new,
+                        Collectors.toList()));
+
+        List<BottleRecord> summaryRows = recordsByWeek.entrySet().stream()
+                .sorted(Map.Entry.<Integer, List<BottleRecord>>comparingByKey().reversed())
+                .map(entry -> summaryRow("Week " + entry.getKey(), entry.getValue(), latestDate(entry.getValue())))
+                .collect(Collectors.toList());
+        setSummaryRows(summaryRows);
     }
 
     @FXML private void filterYear() {
         LocalDate today = LocalDate.now();
-        filterByDate(today.withDayOfYear(1), today);
+        LocalDate from = today.withDayOfYear(1);
+        Map<Integer, List<BottleRecord>> recordsByMonth = recordsBetween(from, today).stream()
+                .collect(Collectors.groupingBy(
+                        record -> record.getDate().getMonthValue(),
+                        LinkedHashMap::new,
+                        Collectors.toList()));
+
+        List<BottleRecord> summaryRows = recordsByMonth.entrySet().stream()
+                .sorted(Map.Entry.<Integer, List<BottleRecord>>comparingByKey().reversed())
+                .map(entry -> summaryRow(
+                        entry.getValue().get(0).getDate().getMonth().getDisplayName(TextStyle.FULL, Locale.US),
+                        entry.getValue(),
+                        latestDate(entry.getValue())))
+                .collect(Collectors.toList());
+        setSummaryRows(summaryRows);
     }
 
     private void filterByDate(LocalDate from, LocalDate to) {
@@ -265,6 +315,43 @@ public class BottleRecordsController {
                         && !r.getDate().isAfter(to))
                 .collect(Collectors.toList());
         submissionTable.setItems(FXCollections.observableArrayList(filtered));
+    }
+
+    private List<BottleRecord> recordsBetween(LocalDate from, LocalDate to) {
+        return allData.stream()
+                .filter(r -> r.getDate() != null
+                        && !r.getDate().isBefore(from)
+                        && !r.getDate().isAfter(to))
+                .collect(Collectors.toList());
+    }
+
+    private void setSummaryRows(List<BottleRecord> rows) {
+        if (submissionTable != null) {
+            submissionTable.setItems(FXCollections.observableArrayList(rows));
+        }
+    }
+
+    private BottleRecord summaryRow(String label, List<BottleRecord> records, LocalDate sortDate) {
+        int bottles = records.stream().mapToInt(BottleRecord::getBottles).sum();
+        double points = records.stream().mapToDouble(BottleRecord::getPoints).sum();
+        BottleRecord row = new BottleRecord(0, 0, bottles, points, 0, 0, points, sortDate);
+        row.setDisplayDate(label);
+        return row;
+    }
+
+    private LocalDate latestDate(List<BottleRecord> records) {
+        return records.stream()
+                .map(BottleRecord::getDate)
+                .filter(date -> date != null)
+                .max(Comparator.naturalOrder())
+                .orElse(null);
+    }
+
+    private String weekLabel(LocalDate date, LocalDate today) {
+        long daysAgo = ChronoUnit.DAYS.between(date, today);
+        if (daysAgo == 0) return "Today";
+        if (daysAgo == 1) return "Yesterday";
+        return daysAgo + " days ago";
     }
 
     // ── Popups ─────────────────────────────────────────────────────────────

@@ -11,6 +11,7 @@ public class BottleRecord {
     private double badgeBonus;
     private double points;
     private LocalDate date;
+    private String displayDate;
 
     public BottleRecord() {
     }
@@ -43,6 +44,8 @@ public class BottleRecord {
     public void setPoints(double points) { this.points = points; }
     public LocalDate getDate() { return date; }
     public void setDate(LocalDate date) { this.date = date; }
+    public String getDisplayDate() { return displayDate; }
+    public void setDisplayDate(String displayDate) { this.displayDate = displayDate; }
 
     @Override
     public String toString() {

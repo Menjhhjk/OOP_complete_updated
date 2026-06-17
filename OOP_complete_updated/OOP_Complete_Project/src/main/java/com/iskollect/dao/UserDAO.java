@@ -27,6 +27,16 @@ public class UserDAO {
         }
     }
 
+    private void ensureCreatedAtColumn() throws SQLException {
+        try (Statement st = conn().createStatement()) {
+            st.executeUpdate("ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at TIMESTAMP");
+            st.executeUpdate("UPDATE users u SET created_at = COALESCE("
+                    + "(SELECT MIN(l.performed_at) FROM inout_logs l WHERE l.user_id = u.user_id), "
+                    + "u.last_activity, CURRENT_TIMESTAMP) WHERE u.created_at IS NULL");
+            st.executeUpdate("ALTER TABLE users ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP");
+        }
+    }
+
     private String userSelect(String whereClause) {
         return "SELECT u.*, "
                 + "COALESCE((SELECT SUM(br.bottles_collected) FROM bottle_records br "
@@ -40,10 +50,12 @@ public class UserDAO {
     }
 
     public boolean registerUser(User user) throws DatabaseException {
-        String sql = "INSERT INTO users (username, display_name, email, password_hash) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO users (username, display_name, email, password_hash, created_at) "
+                + "VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)";
 
         try {
             ensureDisplayNameColumn();
+            ensureCreatedAtColumn();
             try (PreparedStatement ps = conn().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getName());
@@ -68,10 +80,13 @@ public class UserDAO {
 
     public User searchUser(String webmail) throws DatabaseException {
         String sql = userSelect("WHERE LOWER(u.email) = LOWER(?)");
-        try (PreparedStatement ps = conn().prepareStatement(sql)) {
+        try {
+            ensureCreatedAtColumn();
+            try (PreparedStatement ps = conn().prepareStatement(sql)) {
             ps.setString(1, webmail);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? map(rs) : null;
+            }
             }
         } catch (SQLException e) {
             throw new DatabaseException("Failed to search user credential.", e);
@@ -80,10 +95,13 @@ public class UserDAO {
 
     public User findById(int userId) throws DatabaseException {
         String sql = userSelect("WHERE u.user_id = ?");
-        try (PreparedStatement ps = conn().prepareStatement(sql)) {
+        try {
+            ensureCreatedAtColumn();
+            try (PreparedStatement ps = conn().prepareStatement(sql)) {
             ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? map(rs) : null;
+            }
             }
         } catch (SQLException e) {
             throw new DatabaseException("Failed to find user " + userId + ".", e);
@@ -248,6 +266,10 @@ public class UserDAO {
         java.sql.Timestamp activity = readTimestamp(rs, "last_activity");
         if (activity != null) {
             user.setLastActivity(activity.toLocalDateTime());
+        }
+        java.sql.Timestamp createdAt = readTimestamp(rs, "created_at");
+        if (createdAt != null) {
+            user.setCreatedAt(createdAt.toLocalDateTime());
         }
         return user;
     }

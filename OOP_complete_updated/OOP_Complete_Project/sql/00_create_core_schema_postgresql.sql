@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS users (
     account_status VARCHAR(20) DEFAULT 'active',
     failed_login_attempts INTEGER DEFAULT 0,
     session_token VARCHAR(255),
-    last_activity TIMESTAMP
+    last_activity TIMESTAMP,
+    created_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS badges (

@@ -68,6 +68,8 @@ public class ProfileController {
     private final BadgeService     badgeService     = new BadgeService();
     private static final Pattern USERNAME_PATTERN =
             Pattern.compile("^[A-Za-z0-9][A-Za-z0-9._-]{2,29}$");
+    private static final Path PROFILE_PICTURE_DIR =
+            Paths.get("data", "profile_pics").toAbsolutePath().normalize();
 
     @FXML
     public void initialize() {
@@ -81,22 +83,15 @@ public class ProfileController {
         setLabel(displayNameLabel,   user.getName());
         setLabel(usernameDisplayLabel, "@" + safeUsername(user.getUsername()));
 
-        if (user.getLastActivity() != null) {
+        if (user.getCreatedAt() != null) {
             setLabel(memberSinceLabel,
-                user.getLastActivity().format(DateTimeFormatter.ofPattern("MMMM yyyy")));
+                user.getCreatedAt().format(DateTimeFormatter.ofPattern("MMMM yyyy")));
         }
         setField(displayNameField, user.getName());
         setField(ageField, String.valueOf(user.getAge()));
         setField(usernameField, user.getUsername());
 
-        // Load saved profile picture if available
-        String photoPath = user.getProfilePhoto();
-        if (photoPath != null && !photoPath.isBlank()) {
-            File photoFile = new File(photoPath);
-            if (photoFile.exists() && profilePicture != null) {
-                setProfileImage(new Image(photoFile.toURI().toString()));
-            }
-        }
+        loadSavedProfilePicture(user);
 
         int userId = user.getUserId();
         Thread t = new Thread(() -> {
@@ -174,17 +169,19 @@ public class ProfileController {
         if (selectedFile == null) return; //
 
         try {
-            Path destFolder = Paths.get("data", "profile_pics");
+            Path destFolder = PROFILE_PICTURE_DIR;
             Files.createDirectories(destFolder);
 
             String fileName = "user_" + user.getUserId() + ".png";
             Path destPath = destFolder.resolve(fileName);
             Files.copy(selectedFile.toPath(), destPath, StandardCopyOption.REPLACE_EXISTING);
 
-            userDAO.updateProfilePicture(user.getUserId(), destPath.toString());
+            String savedPath = destPath.toString();
+            userDAO.updateProfilePicture(user.getUserId(), savedPath);
+            user.setProfilePhoto(savedPath);
             setProfileImage(new Image(destPath.toUri().toString()));
 
-            System.out.println("Profile picture updated to: " + destPath.toString());
+            System.out.println("Profile picture updated to: " + savedPath);
 
         } catch (Exception e) {
             System.err.println("Error saving profile picture: " + e.getMessage());
@@ -364,6 +361,52 @@ public class ProfileController {
         double x = (width - cropSize) / 2;
         double y = (height - cropSize) / 2;
         profilePicture.setViewport(new Rectangle2D(x, y, cropSize, cropSize));
+    }
+
+    private void loadSavedProfilePicture(User user) {
+        if (profilePicture == null || user == null) return;
+
+        String photoPath = user.getProfilePhoto();
+        if (photoPath == null || photoPath.isBlank()) {
+            try {
+                User freshUser = userDAO.findById(user.getUserId());
+                if (freshUser != null) {
+                    photoPath = freshUser.getProfilePhoto();
+                    user.setProfilePhoto(photoPath);
+                }
+            } catch (DatabaseException e) {
+                System.err.println("Could not reload profile picture path: " + e.getMessage());
+            }
+        }
+
+        Path resolvedPhoto = resolveProfilePhotoPath(photoPath);
+        if (resolvedPhoto != null && Files.exists(resolvedPhoto)) {
+            setProfileImage(new Image(resolvedPhoto.toUri().toString()));
+        }
+    }
+
+    private Path resolveProfilePhotoPath(String photoPath) {
+        if (photoPath == null || photoPath.isBlank()) return null;
+
+        Path rawPath = Paths.get(photoPath);
+        if (rawPath.isAbsolute() && Files.exists(rawPath)) {
+            return rawPath;
+        }
+
+        Path cwdPath = rawPath.toAbsolutePath().normalize();
+        if (Files.exists(cwdPath)) {
+            return cwdPath;
+        }
+
+        Path fileName = rawPath.getFileName();
+        if (fileName != null) {
+            Path profileDirPath = PROFILE_PICTURE_DIR.resolve(fileName).normalize();
+            if (Files.exists(profileDirPath)) {
+                return profileDirPath;
+            }
+        }
+
+        return cwdPath;
     }
 
     @FXML

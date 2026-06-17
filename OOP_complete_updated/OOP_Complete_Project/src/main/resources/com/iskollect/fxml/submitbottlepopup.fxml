@@ -16,7 +16,7 @@
             <Font name="Arial Bold" size="36.0" />
          </font>
       </Label>
-      <Label layoutX="114.0" layoutY="56.0" text="Enter the number of bottles you are">
+      <Label layoutX="102.0" layoutY="56.0" text="Enter the clean bottle count you are">
          <font>
             <Font name="Arial" size="14.0" />
          </font>
@@ -31,7 +31,7 @@
                <Image preserveRatio="true" requestedHeight="200.0" requestedWidth="226.0" smooth="true" url="@../assets/1.png" />
          </image>
       </ImageView>
-      <TextField fx:id="bottleCountField" layoutX="74.0" layoutY="309.0" prefHeight="78.0" prefWidth="300.0" style="-fx-background-radius: 20;">
+      <TextField fx:id="bottleCountField" layoutX="74.0" layoutY="309.0" prefHeight="78.0" prefWidth="300.0" promptText="Bottle count (e.g., 12)" style="-fx-background-radius: 20;">
          <font>
             <Font size="24.0" />
          </font>

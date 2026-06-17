@@ -112,6 +112,7 @@ public class DashboardController {
 
     @FXML
     public void refresh() {
+        SessionManager.refreshUserSession();
         User user = SessionManager.getSession();
         if (user == null) {
             setText(nameLabel, "No active session");
